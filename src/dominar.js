@@ -298,26 +298,8 @@
 		 */
 		getValidator: function() {
 			var validationOptions = this.getValidationOptions();
-
-			validationOptions.rules = this.removeEmptyRules(validationOptions.rules);
 			var validator = new Validator(validationOptions.data, validationOptions.rules);
 			return validator;
-		},
-
-		/**
-		 * Remove empty rules
-		 *
-		 * @param  {object} rules
-		 * @return {object}
-		 */
-		removeEmptyRules: function(rules) {
-			for (var name in rules) {
-				if (rules[name].length === 0)
-				{
-					delete rules[name];
-				}
-			}
-			return rules;
 		},
 
 		/**
