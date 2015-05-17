@@ -1,7 +1,7 @@
 Dominar
 ====
 
-Ultra lightweight and highly configurable boostrap validator built on-top of validator.js.
+Ultra lightweight and highly configurable boostrap validator built on-top of [validator.js](https://github.com/skaterdav85/validatorjs).
 
 ### Usage
 
