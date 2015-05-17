@@ -1,0 +1,24 @@
+{
+  "name": "dominar",
+  "version": "0.0.1",
+  "description": "Lighweight and highly configurable bootstrap validator",
+  "author": "Gary Green",
+  "main": "dist/dominar.js",
+  "scripts": {
+    "test": "mocha -b -R tap tests"
+  },
+  "dependencies": {
+    "validatorjs": "~1.3.2"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "gulp": "^3.8.5",
+    "gulp-concat": "^2.2.0",
+    "gulp-header": "^1.0.5",
+    "gulp-uglify": "^0.3.1",
+    "gulp-concat": "~2.5.2",
+    "gulp-rename": "~1.2.2",
+    "del": "~1.1.1",
+    "mocha": "^1.20.1"
+  }
+}
