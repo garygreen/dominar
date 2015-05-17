@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Dominar demo</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="../node_modules/validatorjs/dist/validator.js"></script>
+		<script src="../src/dominar.js"></script>
+	</head>
+	<body>
+		<div class="container">
+
+			<h1>Dominar</h1>
+
+			<form>
+				<div class="form-group">
+					<label class="control-label">Username</label>
+					<input name="username" type="text" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label">Notes</label>
+					<textarea name="notes" class="form-control"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label">Group</label>
+					<select name="group" class="form-control">
+						<option value="">Select a group</option>
+						<option value="admin">Guest</option>
+						<option value="admin">Admin</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label">Custom validation (must be uppercase)</label>
+					<input name="uppercase" type="text" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<span class="help-block"></span>
+					<label class="control-label">Custom error message position</label>
+					<input name="error_ontop" class="form-control"/>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+
+		<script>
+
+			Dominar.register('uppercase', function(value) {
+				return value.toUpperCase() === value;
+			}, 'The :attribute must only be uppercase.');
+
+			var validator = new Dominar($('form'), {
+				username: {
+					rules: 'required|min:3|max:10'
+				},
+				notes: {
+					rules: 'required|min:5|max:20'
+				},
+				group: {
+					rules: 'required|in:guest,admin'
+				},
+				uppercase: {
+					rules: 'required|uppercase'
+				},
+				error_ontop: {
+					rules: 'required|min:99999'
+				}
+			});
+		</script>
+	</body>
+</html>
