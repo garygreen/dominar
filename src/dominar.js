@@ -31,8 +31,8 @@
 			message: true,
 			feedback: true,
 			feedbackIcons: {
-				success: '<i class="fa fa-check"></i>',
-				error: '<i class="fa fa-remove"></i>'
+				success: '<i class="glyphicon glyphicon-check"></i>',
+				error: '<i class="glyphicon glyphicon-remove"></i>'
 			}
 		},
 
@@ -94,8 +94,7 @@
 			var isKeyup = eventType == 'keyup';
 			if (((isKeyup && event.keyCode !== 9) || !isKeyup) && field.canTrigger(eventType))
 			{
-				var delay = isKeyup ? undefined : false;
-				if (delay) this.validateDelayed($element);
+				if (isKeyup) this.validateDelayed($element);
 				else this.validate($element);
 			}
 		},
@@ -114,7 +113,7 @@
 		},
 
 		/**
-		 * Validate element
+		 * Validate
 		 *
 		 * @param  {string|jQuery} name
 		 * @param  {function} passes
@@ -127,14 +126,14 @@
 		},
 
 		/**
-		 * Validate element with delay
+		 * Validate with delay
 		 *
 		 * @param  {string|jQuery} name
 		 * @param  {function} passes
 		 * @param  {function} fails
 		 * @return {void}
 		 */
-		validateElementDelayed: function(name, passes, fails) {
+		validateDelayed: function(name, passes, fails) {
 			var field = this.getField(name);
 			field.validate(passes, fails);
 		},
