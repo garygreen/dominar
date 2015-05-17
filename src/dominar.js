@@ -44,7 +44,7 @@
 		 * @return {void}
 		 */
 		bindEvents: function() {
-			this.$form.on('keyup blur change', 'textarea, input', $.proxy(this.fireValidate, this));
+			this.$form.on('keyup blur change', 'textarea, input, select', $.proxy(this.fireValidate, this));
 			this.$form.on('submit', $.proxy(this.fireSubmit, this));
 		},
 
