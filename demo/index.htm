@@ -44,6 +44,12 @@
 					<input name="error_ontop" class="form-control"/>
 				</div>
 
+				<h3>Asynchronous rule <code>remoteRule</code></h3>
+				<div class="form-group">
+					<label class="control-label">Username available? ['admin' is not available]</label>
+					<input name="username_async" type="text" class="form-control" placeholder="Enter a username and wait..."/>
+				</div>
+
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
 		</div>
@@ -69,6 +75,22 @@
 				},
 				error_ontop: {
 					rules: 'required|min:99999'
+				},
+				username_async: {
+					rules: 'required|min:1',
+					remoteRule: function(desiredUsername) {
+						// Simulate ajax request
+						var dfd = $.Deferred();
+						setTimeout(function() {
+							// (Your server would do the validation)
+							if (desiredUsername == 'admin')
+							{
+								return dfd.reject('You cannot have the username admin.');
+							}
+							return dfd.resolve();
+						}, 1000);
+						return dfd;
+					}
 				}
 			});
 		</script>
