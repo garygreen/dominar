@@ -32,8 +32,8 @@
 				message: true,
 				feedback: true,
 				feedbackIcons: {
-					success: '<i class="fa fa-check"></i>',
-					error: '<i class="fa fa-remove"></i>'
+					success: '<i class="glyphicon glyphicon-check"></i>',
+					error: '<i class="glyphicon glyphicon-remove"></i>'
 				}
 			});
 
@@ -76,7 +76,7 @@
 			dominar.validate($username);
 			assert.equal($form.html(), [
 				'<div class="form-group has-error has-feedback">',
-					'<input name="username"><span class="form-control-feedback"><i class="fa fa-remove"></i></span>',
+					'<input name="username"><span class="form-control-feedback"><i class="glyphicon glyphicon-remove"></i></span>',
 				'</div>'
 			].join(''));
 		});
@@ -96,7 +96,7 @@
 			assert.equal($form.html(), [
 				'<div class="form-group has-error has-feedback">',
 					'<input name="username"><span class="help-block">The username field is required.</span>',
-					'<span class="form-control-feedback"><i class="fa fa-remove"></i></span>',
+					'<span class="form-control-feedback"><i class="glyphicon glyphicon-remove"></i></span>',
 				'</div>'
 			].join(''));
 		});
