@@ -62,7 +62,7 @@
 
 			var name = validating.attr('name');
 			var field = this.fields[name];
-			if (!field)
+			if (!field && this.options[name])
 			{
 				field = new this.DominarField(name, validating, this.getOptions(name));
 				this.fields[name] = field;
@@ -90,12 +90,15 @@
 		fireValidate: function(event) {
 			var $element = $(event.target);
 			var field = this.getField($element);
-			var eventType = event.type;
-			var isKeyup = eventType == 'keyup';
-			if (((isKeyup && event.keyCode !== 9) || !isKeyup) && field.canTrigger(eventType))
+			if (field)
 			{
-				if (isKeyup) this.validateDelayed($element);
-				else this.validate($element);
+				var eventType = event.type;
+				var isKeyup = eventType == 'keyup';
+				if (((isKeyup && event.keyCode !== 9) || !isKeyup) && field.canTrigger(eventType))
+				{
+					if (isKeyup) this.validateDelayed($element);
+					else this.validate($element);
+				}
 			}
 		},
 
@@ -122,7 +125,7 @@
 		 */
 		validate: function(name, passes, fails) {
 			var field = this.getField(name);
-			field.runValidator(passes, fails);
+			if (field) field.runValidator(passes, fails);
 		},
 
 		/**
@@ -135,7 +138,7 @@
 		 */
 		validateDelayed: function(name, passes, fails) {
 			var field = this.getField(name);
-			field.validate(passes, fails);
+			if (field) field.validate(passes, fails);
 		},
 
 		/**
