@@ -22,7 +22,7 @@ var validator = new Dominar($('form'), {
 
 ### HTML Structure
 
-Your elements must be contained inside `.form-group`
+By default it is assumed your element is contained inside a `.form-group`
 
 ```html
 <div class="form-group">
@@ -30,6 +30,8 @@ Your elements must be contained inside `.form-group`
 	<input type="text" name="username"/>
 </div>
 ```
+
+You can change this by supplying the `container` option e.g. `container: 'td'`
 
 ### Custom validation rule
 
@@ -61,6 +63,7 @@ Option        | Type           | Description
 rules         | string         | Set of rules seperated by pipe
 triggers      | array/false    | Determines when validation will be triggered on element. Set to `false` to turn off automatic triggering.
 delay         | integer/false  | Delay in triggering validation when typing in a field. Set to `false` to always trigger validation as soon as possible.
+container     | string         | The selector for the element container
 message       | boolean        | Whether to display error messages or not
 feedback      | boolean        | Whether to display feedback icon or not
 feedbackIcons | object         | Configure the `success` and `error` feedback icons

@@ -190,7 +190,7 @@
 		this.name = name;
 		this.options = options;
 		this.$field = $field;
-		this.$container = $field.closest('.form-group');
+		this.$container = $field.closest(this.options.container || '.form-group');
 		this.$message = this.options.message ? this.getMessageElement() : $();
 		this.$feedback = this.options.feedback ? this.getFeedbackElement() : $();
 	};
