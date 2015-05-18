@@ -66,6 +66,7 @@
 			{
 				field = new this.DominarField(name, validating, this.getOptions(name));
 				this.fields[name] = field;
+				this.trigger('initField', field);
 			}
 			return field;
 		},
@@ -79,6 +80,17 @@
 		getOptions: function(name) {
 			var options = this.options[name];
 			return $.extend({}, this.defaults, options);
+		},
+
+		/**
+		 * Trigger event
+		 *
+		 * @param  {string} name
+		 * @param  {mixed} argument
+		 * @return {void}
+		 */
+		trigger: function(name, argument) {
+			this.$form.trigger('dominar.' + name, [argument]);
 		},
 
 		/**
@@ -125,7 +137,7 @@
 		 */
 		validate: function(name, passes, fails) {
 			var field = this.getField(name);
-			if (field) field.runValidator(passes, fails);
+			if (field) field.validate(passes, fails);
 		},
 
 		/**
@@ -138,7 +150,7 @@
 		 */
 		validateDelayed: function(name, passes, fails) {
 			var field = this.getField(name);
-			if (field) field.validate(passes, fails);
+			if (field) field.validateDelayed(passes, fails);
 		},
 
 		/**
@@ -161,7 +173,7 @@
 				field = this.getField(name) || this.getField(this.$form.find('[name="' + name + '"]'));
 				validators.push(dfd);
 				(function(field, dfd) {
-					field.runValidator(function() {
+					field.validate(function() {
 						dfd.resolve();
 					}, function(error) {
 						dfd.reject(error);
@@ -198,36 +210,13 @@
 	DominarField.prototype = {
 
 		/**
-		 * Determine if field is valid
+		 * Validate field
 		 *
 		 * @param {function} passes
 		 * @param {function} fails
 		 * @return {void}
 		 */
 		validate: function(passes, fails) {
-
-			var delay = this.options.delay;
-			passes = passes || $.noop;
-			fails = fails || $.noop;
-			clearTimeout(this.delayTimer);
-			if (delay)
-			{
-				this.delayTimer = setTimeout($.proxy(function() { this.runValidator(passes, fails); }, this), delay);
-			}
-			else
-			{
-				this.runValidator(passes, fails);
-			}
-		},
-
-		/**
-		 * Run validator
-		 *
-		 * @param {function} passes
-		 * @param {function} fails
-		 * @return {void}
-		 */
-		runValidator: function(passes, fails) {
 
 			var name = this.getName();
 			var value = this.getValue();
@@ -262,6 +251,29 @@
 			else
 			{
 				validate.reject(this.validator.errors.first(name));
+			}
+		},
+
+		/**
+		 * Validate field with delay (if applicable)
+		 *
+		 * @param {function} passes
+		 * @param {function} fails
+		 * @return {void}
+		 */
+		validateDelayed: function(passes, fails) {
+
+			var delay = this.options.delay;
+			passes = passes || $.noop;
+			fails = fails || $.noop;
+			clearTimeout(this.delayTimer);
+			if (delay)
+			{
+				this.delayTimer = setTimeout($.proxy(function() { this.validate(passes, fails); }, this), delay);
+			}
+			else
+			{
+				this.validate(passes, fails);
 			}
 		},
 

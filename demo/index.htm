@@ -7,6 +7,12 @@
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="../node_modules/validatorjs/dist/validator.js"></script>
 		<script src="../src/dominar.js"></script>
+		<style type="text/css">
+			.form-control-feedback {
+    			pointer-events: auto;
+    			cursor: pointer;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -14,6 +20,8 @@
 			<h1>Dominar</h1>
 
 			<form>
+				<h3>Basic field tests</h3>
+
 				<div class="form-group">
 					<label class="control-label">Username</label>
 					<input name="username" type="text" class="form-control"/>
@@ -44,6 +52,15 @@
 					<input name="error_ontop" class="form-control"/>
 				</div>
 
+				<br/>
+
+				<h3>Remove error on click of icon</h3>
+				<div class="form-group">
+					<input name="remove_icon_test" type="text" class="form-control" placeholder="Enter something and click the error icon..."/>
+				</div>
+
+				<br/>
+
 				<h3>Asynchronous rule <code>remoteRule</code></h3>
 				<div class="form-group">
 					<label class="control-label">Username available? ['admin' is not available]</label>
@@ -60,7 +77,21 @@
 				return value.toUpperCase() === value;
 			}, 'The :attribute must only be uppercase.');
 
-			var validator = new Dominar($('form'), {
+			var $form = $('form');
+
+			$form.on('dominar.initField', function(event, field) {
+				if (field.getName() == 'remove_icon_test')
+				{
+					field.$feedback.on('click', function() {
+						// Only remove if field is invalid:
+						field.validate($.noop, function() {
+							field.reset();
+						});
+					});
+				}
+			});
+
+			var validator = new Dominar($form, {
 				username: {
 					rules: 'required|min:3|max:10'
 				},
@@ -75,6 +106,11 @@
 				},
 				error_ontop: {
 					rules: 'required|min:99999'
+				},
+				remove_icon_test: {
+					rules: 'required|min:99999',
+					triggers: ['keyup'],
+					delay: false
 				},
 				username_async: {
 					rules: 'required|min:1',
