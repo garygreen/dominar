@@ -16,7 +16,7 @@
 
 	function Dominar($form, options) {
 		this.$form = $form;
-		this.options = options;
+		this.options = options || {};
 		this.fields = {};
 		this.bindEvents();
 	}
@@ -80,6 +80,20 @@
 		getOptions: function(name) {
 			var options = this.options[name];
 			return $.extend({}, this.defaults, options);
+		},
+
+		/**
+		 * Add elements with given options
+		 *
+		 * @param {jQuery} $elements
+		 * @param {object} options
+		 */
+		add: function($elements, options) {
+			var dominar = this;
+			$elements.each(function() {
+				dominar.options[this.name] = options;
+			});
+			return this;
 		},
 
 		/**

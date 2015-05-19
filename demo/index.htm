@@ -12,6 +12,11 @@
     			pointer-events: auto;
     			cursor: pointer;
 			}
+
+			td.has-feedback .form-control-feedback {
+				top: 9px;
+				right: 7px;
+			}
 		</style>
 	</head>
 	<body>
@@ -51,6 +56,28 @@
 					<label class="control-label">Custom error message position</label>
 					<input name="error_ontop" class="form-control"/>
 				</div>
+
+				<br/>
+
+				<h3>Array validation</h3>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Friend Name</th>
+							<th>Notes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input name="friends[0][name]" type="text" class="form-control friend-name"/>
+							<td><input name="friends[0][notes]" type="text" class="form-control friend-notes"/>
+						</td>
+						<tr>
+							<td><input name="friends[1][name]" type="text" class="form-control friend-name"/>
+							<td><input name="friends[1][notes]" type="text" class="form-control friend-notes"/>
+						</td>
+					</tbody>
+				</table>
 
 				<br/>
 
@@ -129,6 +156,16 @@
 					}
 				}
 			});
+
+			validator
+				.add($('.friend-name'), {
+					rules: 'required|min:3|max:10',
+					container: 'td'
+				})
+				.add($('.friend-notes'), {
+					rules: 'required|min:10|max:30',
+					container: 'td'
+				});
 		</script>
 	</body>
 </html>
