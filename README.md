@@ -58,13 +58,14 @@ Note: by default dominar will automatically add errors message straight after th
 
 ### Options
 
-Option        | Type           | Description
---------------|----------------|-----------------------------------------------------------------------
-rules         | string         | Set of rules seperated by pipe
-triggers      | array/false    | Determines when validation will be triggered on element. Set to `false` to turn off automatic triggering.
-delay         | integer/false  | Delay in triggering validation when typing in a field. Set to `false` to always trigger validation as soon as possible.
-container     | string         | The selector for the element container
-message       | boolean        | Whether to display error messages or not
-feedback      | boolean        | Whether to display feedback icon or not
-feedbackIcons | object         | Configure the `success` and `error` feedback icons
-remoteRule    | function       | Asynchronous rule to run
+Option         | Type           | Description
+---------------|----------------|-----------------------------------------------------------------------
+rules          | string         | Set of rules seperated by pipe
+triggers       | array/false    | Determines when validation will be triggered on element. Set to `false` to turn off automatic triggering.
+delay          | integer/false  | Delay in triggering validation when typing in a field. Set to `false` to always trigger validation as soon as possible.
+container      | string         | The selector for the element container
+message        | boolean        | Whether to display error messages or not
+customMessages | object         | Set custom error messages for the rules
+feedback       | boolean        | Whether to display feedback icon or not
+feedbackIcons  | object         | Configure the `success` and `error` feedback icons
+remoteRule     | function       | Asynchronous rule to run
