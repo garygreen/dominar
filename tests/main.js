@@ -30,6 +30,7 @@
 				remoteRule: $.noop,
 				triggers: ['keyup', 'focusout', 'change'],
 				message: true,
+				customMessages: {},
 				feedback: true,
 				feedbackIcons: {
 					success: '<i class="glyphicon glyphicon-check"></i>',
@@ -127,6 +128,30 @@
 			assert.equal($form.html(), [
 				'<div class="form-group has-success has-feedback">',
 					'<input name="username"><span class="form-control-feedback"><i class="custom-success-icon"></i></span>',
+				'</div>'
+			].join(''));
+
+		});
+
+
+		it('should allow custom error message', function() {
+
+			var $form;
+			var dominar = new Dominar($form = $('<form><div class="form-group"><input name="username"/></div></form></form>'), {
+				username: {
+					rules: 'required',
+					feedback: false,
+					customMessages: {
+						'required': ':attribute field is required you silly billy!'
+					}
+				}
+			});
+
+			dominar.validate($form.find('input'));
+			assert.equal($form.html(), [
+				'<div class="form-group has-error">',
+					'<input name="username">',
+					'<span class="help-block">username field is required you silly billy!</span>',
 				'</div>'
 			].join(''));
 

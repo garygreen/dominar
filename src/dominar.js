@@ -29,6 +29,7 @@
 			remoteRule: $.noop,
 			triggers: ['keyup', 'focusout', 'change'],
 			message: true,
+			customMessages: {},
 			feedback: true,
 			feedbackIcons: {
 				success: '<i class="glyphicon glyphicon-check"></i>',
@@ -308,7 +309,8 @@
 
 			var options = {
 				data: data,
-				rules: rules
+				rules: rules,
+				customMessages: this.options.customMessages
 			};
 
 			if (this.options.validatorOptions)
@@ -325,8 +327,8 @@
 		 * @return {Validator}
 		 */
 		getValidator: function() {
-			var validationOptions = this.getValidationOptions();
-			var validator = new Validator(validationOptions.data, validationOptions.rules);
+			var options = this.getValidationOptions();
+			var validator = new Validator(options.data, options.rules, options.customMessages);
 			return validator;
 		},
 
