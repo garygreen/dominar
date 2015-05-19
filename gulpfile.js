@@ -9,37 +9,46 @@ var config = {
 	header: '/* dominar.js - Copyright 2015 Gary Green. Licensed under the Apache License, Version 2.0 */'
 };
 
-function outputDist(stream, output) {
-	return stream
-		.pipe(concat('dominar.js'))
-		.pipe(uglify())
-		.pipe(header('/* dominar.js - Copyright 2015 Gary Green. Licensed under the Apache License, Version 2.0 */'))
-		.pipe(rename(output))
-		.pipe(gulp.dest('dist'));
-}
-
 // Clean dist folder
 gulp.task('clean', function() {
 	return del(['dist/*']);
 });
 
-// Copy
+// Dist
 gulp.task('dist', function() {
 	return gulp.src('src/dominar.js')
 		.pipe(concat('dominar.js'))
-		.pipe(uglify())
 		.pipe(header(config.header))
 		.pipe(gulp.dest('dist'));
 });
 
-// Copy
+// Dist standalone
 gulp.task('dist-standalone', function() {
 		return gulp.src(['node_modules/validatorjs/dist/validator.js', 'src/dominar.js'])
 		.pipe(concat('dominar.js'))
-		.pipe(uglify())
 		.pipe(header(config.header))
 		.pipe(rename('dominar-standalone.js'))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['clean', 'dist', 'dist-standalone']);
+// Dist min
+gulp.task('dist-min', function() {
+	return gulp.src('src/dominar.js')
+		.pipe(concat('dominar.js'))
+		.pipe(uglify())
+		.pipe(header(config.header))
+		.pipe(rename('dominar.min.js'))
+		.pipe(gulp.dest('dist'));
+});
+
+// Dist standalone min
+gulp.task('dist-standalone-min', function() {
+		return gulp.src(['node_modules/validatorjs/dist/validator.js', 'src/dominar.js'])
+		.pipe(concat('dominar.js'))
+		.pipe(uglify())
+		.pipe(header(config.header))
+		.pipe(rename('dominar-standalone.min.js'))
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('default', ['clean', 'dist', 'dist-standalone', 'dist-min', 'dist-standalone-min']);
