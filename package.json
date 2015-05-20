@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Lighweight and highly configurable bootstrap validator",
   "author": "Gary Green",
-  "main": "dist/dominar.js",
+  "main": "dist/dominar-standalone.js",
   "scripts": {
     "test": "mocha -b -R tap tests"
   },

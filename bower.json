@@ -1,0 +1,24 @@
+{
+  "name": "dominar",
+  "version": "0.0.1",
+  "homepage": "https://github.com/garygreen/dominar",
+  "authors": [
+    "Gary Green"
+  ],
+  "description": "Lightweight and highly configurable boostrap validator",
+  "main": "dist/dominar-standalone.js",
+  "keywords": [
+    "javascript",
+    "bootstrap",
+    "validator",
+    "validation"
+  ],
+  "license": "Apache 2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
