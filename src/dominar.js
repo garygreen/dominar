@@ -12,7 +12,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-(function($, window, Validator) {
+(function(factory) {
+
+	if (typeof exports !== 'undefined')
+	{
+		module.exports = factory;
+	}
+	else
+	{
+		window.Dominar = factory(jQuery, Validator);
+	}
+}(function($, Validator) {
 
 	function Dominar($form, options) {
 		this.$form = $form;
@@ -45,8 +55,9 @@
 		 * @return {void}
 		 */
 		bindEvents: function() {
-			this.$form.on('keyup blur change', 'textarea, input, select', $.proxy(this.fireValidate, this));
-			this.$form.on('submit', $.proxy(this.fireSubmit, this));
+			var dominar = this;
+			this.$form.on('keyup blur change', 'textarea, input, select', function(event) { dominar.fireValidate.call(dominar, event); });
+			this.$form.on('submit', function() { dominar.fireSubmit.call(dominar, event); });
 		},
 
 		/**
@@ -278,13 +289,14 @@
 		 */
 		validateDelayed: function(passes, fails) {
 
+			var field = this;
 			var delay = this.options.delay;
 			passes = passes || $.noop;
 			fails = fails || $.noop;
 			clearTimeout(this.delayTimer);
 			if (delay)
 			{
-				this.delayTimer = setTimeout($.proxy(function() { this.validate(passes, fails); }, this), delay);
+				this.delayTimer = setTimeout(function() { field.validate.apply(field, [passes, fails]) }, delay);
 			}
 			else
 			{
@@ -458,8 +470,8 @@
 			this.$feedback.empty();
 		}
 
-	}
+	};
 
-	window.Dominar = Dominar;
+	return Dominar;
 
-}(jQuery, window, window.Validator));
+}));
