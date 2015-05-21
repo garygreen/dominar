@@ -9,7 +9,7 @@ Ultra lightweight and highly configurable boostrap validator built on-top of [va
 var validator = new Dominar($('form'), {
    username: {
       rules: 'required|min:3|max:10',
-      triggers: ['blur', 'change'],
+      triggers: ['keyup', 'change', 'focusout'],
       delay: 300
    },
    email: {
@@ -17,6 +17,8 @@ var validator = new Dominar($('form'), {
    }
 });
 ```
+
+**Note:** See below for all possible options. Only `rules` is required.
 
 ---
 
