@@ -89,6 +89,20 @@ On **your server** return HTTP status code 200 if validation passes or if not, a
 {"message": "Username already taken."}
 ```
 
+### Custom error message
+
+By default error messages are automatically generated for you. If you would like to customise, use the `customMessages` option to specify a custom error message for the rules.
+
+```
+'username': {
+   'rules': 'required|min:5',
+   'customMessages': {
+      'required': 'Whoops, :attribute field is required!',
+      'min': 'This needs more characters :('
+   }
+}
+```
+
 ### Customising placement of error messages
 
 Just manually add anywhere inside your `.form-group` a `.help-block` and dominar will automatically detect and use.
