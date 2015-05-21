@@ -100,6 +100,19 @@ Just manually add anywhere inside your `.form-group` a `.help-block` and dominar
 </div>
 ```
 
+### Changing default options
+
+If you want to change the default options you can simply overwrite on the prototype like in the below example. This is useful if you want to always use e.g. fontawesome icons instead of glyphicons. Of course these are just defaults and can still be customised on a per-field level.
+
+```javascript
+Dominar.prototype.defaults = $.extend({}, Dominar.prototype.defaults, {
+   feedbackIcons: {
+      error: '<i class="fa fa-remove"></i>',
+      success: '<i class="fa fa-check"></i>'
+   }
+});
+```
+
 Note: by default dominar will automatically add errors message straight after the `input` element.
 
 ### Options
