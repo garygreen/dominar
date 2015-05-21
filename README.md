@@ -47,7 +47,7 @@ Dominar.register('uppercase', function(value) {
 
 ### Asynchronous / Ajax validation rules
 
-Use `remoteRule` which takes a deferred object (as does `$.ajax` and `$.get` etc).
+Use `remoteRule` which takes a deferred object (like `$.ajax` and `$.get` returns).
 
 ```javascript
 var dominar = new Dominar($('form'), {
