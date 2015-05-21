@@ -100,6 +100,8 @@ Just manually add anywhere inside your `.form-group` a `.help-block` and dominar
 </div>
 ```
 
+Note: by default dominar will automatically add errors message straight after the `input` element.
+
 ### Changing default options
 
 If you want to change the default options you can simply overwrite on the prototype like in the below example. This is useful if you want to always use e.g. fontawesome icons instead of glyphicons. Of course these are just defaults and can still be customised on a per-field level.
@@ -112,8 +114,6 @@ Dominar.prototype.defaults = $.extend({}, Dominar.prototype.defaults, {
    }
 });
 ```
-
-Note: by default dominar will automatically add errors message straight after the `input` element.
 
 ### Options
 
@@ -129,3 +129,29 @@ customMessages | object         | Set custom error messages for the rules
 feedback       | boolean        | Whether to display feedback icon or not
 feedbackIcons  | object         | Configure the `success` and `error` feedback icons
 remoteRule     | function       | Asynchronous rule to run
+
+## Events
+
+Dominar will fire various events on the `form`. You can listen for the events like:
+
+```javascript
+$('#my-form').bind('dominar.init-field', function(event) {
+   var dominar = event.dominar;
+   var field = event.dominarField; // The DominarField which has been initialized
+});
+```
+
+The `submit` event allows you to prevent the validation from occuring by preventing the default action:
+
+```javascript
+$('#my-form').bind('dominar.submit', function(event) {
+   event.preventDefault(); // Prevent form from being validated
+});
+```
+
+Name                  | Preventable | Description
+----------------------|-------------|----------------------------------------------------------
+dominar.init-field    | No          | When a `DominarField` has been initialized (useful for adding additional event listeners to the input element etc)
+dominar.submit        | Yes         | When form is about to be submitted and before validation check has been run.
+dominar.submit-passed | Yes         | When form passed validation and is about to be submitted.
+dominar.submit-failed | No          | When failed validation check when form was attempted to be submitted.
