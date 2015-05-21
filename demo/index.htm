@@ -106,8 +106,9 @@
 
 			var $form = $('form');
 
-			$form.on('dominar.initField', function(event, field) {
-				if (field.getName() == 'remove_icon_test')
+			$form.on('dominar.init-field', function(event) {
+				var field = event.dominarField;
+				if (event.dominarField.getName() == 'remove_icon_test')
 				{
 					field.$feedback.on('click', function() {
 						// Only remove if field is invalid:

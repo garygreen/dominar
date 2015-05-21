@@ -24,9 +24,10 @@
 	}
 }(function($, Validator) {
 
-	function Dominar($form, options) {
+	function Dominar($form, options, config) {
 		this.$form = $form;
 		this.options = options || {};
+		this.config = config || $.extend({}, this.configDefaults, config);
 		this.fields = {};
 		this.bindEvents();
 	}
@@ -47,6 +48,10 @@
 			}
 		},
 
+		configDefaults: {
+			validateOnSubmit: true
+		},
+
 		DominarField: DominarField,
 
 		/**
@@ -57,7 +62,7 @@
 		bindEvents: function() {
 			var dominar = this;
 			this.$form.on('keyup blur change', 'textarea, input, select', function(event) { dominar.fireValidate.call(dominar, event); });
-			this.$form.on('submit', function() { dominar.fireSubmit.call(dominar, event); });
+			this.$form.on('submit', function(event) { dominar.fireSubmit.call(dominar, event); });
 		},
 
 		/**
@@ -78,7 +83,7 @@
 			{
 				field = new this.DominarField(name, validating, this.getOptions(name));
 				this.fields[name] = field;
-				this.trigger('initField', field);
+				this.trigger('init-field', { dominarField: field });
 			}
 			return field;
 		},
@@ -112,11 +117,21 @@
 		 * Trigger event
 		 *
 		 * @param  {string} name
-		 * @param  {mixed} argument
-		 * @return {void}
+		 * @param  {object} data
+		 * @param  {function} callback
+		 * @return {$.Event}
 		 */
-		trigger: function(name, argument) {
-			this.$form.trigger('dominar.' + name, [argument]);
+		trigger: function(name, data, callback) {
+			var data = $.extend({}, { dominar: this }, data);
+			var event = $.Event('dominar.' + name, data);
+			this.$form.trigger(event);
+
+			if (callback && !event.isDefaultPrevented())
+			{
+				callback();
+			}
+
+			return event;
 		},
 
 		/**
@@ -147,10 +162,21 @@
 		 * @return {void}
 		 */
 		fireSubmit: function(event) {
-			event.preventDefault();
-			this.validateAll(function() {
-				event.target.submit();
-			});
+			var dominar = this;
+			if (dominar.config.validateOnSubmit)
+			{
+				var submitPassed = function() { event.target.submit(); };
+				var submitFailed = function() { dominar.trigger('submit-failed'); };
+				var submit = function() {
+					event.preventDefault();
+					dominar.validateAll(function() {
+						dominar.trigger('submit-passed', {}, submitPassed);
+					}, function() {
+						dominar.trigger('submit-failed', {}, submitFailed);
+					});
+				};
+				dominar.trigger('submit', {}, submit);
+			}
 		},
 
 		/**

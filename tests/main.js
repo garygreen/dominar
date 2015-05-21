@@ -40,6 +40,14 @@
 
 		});
 
+		it('should default config to', function() {
+
+			assert.deepEqual(Dominar.prototype.configDefaults, {
+				validateOnSubmit: true
+			});
+
+		});
+
 	});
 
 	describe('basic validation and option testing', function() {
