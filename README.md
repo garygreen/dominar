@@ -1,19 +1,19 @@
 Dominar
 ====
 
-Ultra lightweight and highly configurable boostrap validator built on-top of [validator.js](https://github.com/skaterdav85/validatorjs).
+Lightweight and highly configurable boostrap validator built on-top of [validator.js](https://github.com/skaterdav85/validatorjs).
 
 ### Usage
 
 ```javascript
 var validator = new Dominar($('form'), {
+   email: {
+      rules: 'required|email'
+   },
    username: {
       rules: 'required|min:3|max:10',
       triggers: ['keyup', 'change', 'focusout'],
       delay: 300
-   },
-   email: {
-      rules: 'required|email'
    }
 });
 ```
@@ -43,6 +43,27 @@ Add a custom validation rule:
 Dominar.register('uppercase', function(value) {
 	return value.toUpperCase() === value;
 }, 'The :attribute must only be uppercase.');
+```
+
+### Asynchronous / Ajax validation rules
+
+Use `remoteRule` which returns a deferred object (as does `$.ajax` and `$.get` etc).
+
+```javascript
+var dominar = $('form', {
+   username: {
+      rules: 'required',
+      remoteRule: function(desiredUsername) {
+         return $.get('/api/check-username', { username: desiredUsername });
+      }
+   }
+});
+```
+
+On **your server** return HTTP status code 200 if validation passes or if not, a `4xx` json response with the error message:
+
+```json
+{"message": "Username already taken."}
 ```
 
 ### Customising placement of error messages
