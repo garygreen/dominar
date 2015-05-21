@@ -63,6 +63,7 @@ Option         | Type           | Description
 rules          | string         | Set of rules seperated by pipe
 triggers       | array/false    | Determines when validation will be triggered on element. Set to `false` to turn off automatic triggering.
 delay          | integer/false  | Delay in triggering validation when typing in a field. Set to `false` to always trigger validation as soon as possible.
+delayTriggers  | array          | Determines when validation will be triggered as a delay on element.
 container      | string         | The selector for the element container
 message        | boolean        | Whether to display error messages or not
 customMessages | object         | Set custom error messages for the rules

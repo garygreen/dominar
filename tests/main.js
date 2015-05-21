@@ -26,6 +26,7 @@
 
 			assert.deepEqual(Dominar.prototype.defaults, {
 				delay: 300,
+				delayTriggers: ['keyup'],
 				rules: '',
 				remoteRule: $.noop,
 				triggers: ['keyup', 'focusout', 'change'],

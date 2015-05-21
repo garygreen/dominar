@@ -36,6 +36,7 @@
 
 		defaults: {
 			delay: 300,
+			delayTriggers: ['keyup'],
 			rules: '',
 			remoteRule: $.noop,
 			triggers: ['keyup', 'focusout', 'change'],
@@ -145,13 +146,7 @@
 			var field = this.getField($element);
 			if (field)
 			{
-				var eventType = event.type;
-				var isKeyup = eventType == 'keyup';
-				if (((isKeyup && event.keyCode !== 9) || !isKeyup) && field.canTrigger(eventType))
-				{
-					if (isKeyup) this.validateDelayed($element);
-					else this.validate($element);
-				}
+				field.fireValidate(event);
 			}
 		},
 
@@ -331,6 +326,22 @@
 		},
 
 		/**
+		 * Fire validating from an event
+		 *
+		 * @param  {jQuery event} event
+		 * @return {void}
+		 */
+		fireValidate: function(event) {
+			var trigger = this.getTrigger(event);
+
+			if (trigger.validate)
+			{
+				if (trigger.delay) this.validateDelayed();
+				else this.validate();
+			}
+		},
+
+		/**
 		 * Get validation options (data, rules)
 		 *
 		 * @return {object}
@@ -398,17 +409,28 @@
 		},
 
 		/**
-		 * Determine if validation can be triggered from the given type (blur, change, etc)
+		 * Get trigger options from given jQuery event
 		 *
-		 * @param  {string} type
-		 * @return {boolean}
+		 * @param  {$.Event} jquery event
+		 * @return {object}
 		 */
-		canTrigger: function(type) {
-			if ($.isArray(this.options.triggers))
-			{
-				return $.inArray(type, this.options.triggers) > -1;
-			}
-			return false;
+		getTrigger: function(event) {
+			var eventType = event.type;
+			var isKeyup = eventType == 'keyup';
+			
+			// Determine if validation can be triggered by this event (change, keyup etc)
+			var trigger = $.inArray(eventType, this.options.triggers) > -1;
+
+			// Determine if we should validate with a delay
+			var delay = $.inArray(eventType, this.options.delayTriggers) > -1;
+
+			// Determine if validation should occur
+			var validate = ((isKeyup && event.keyCode !== 9) || !isKeyup) && trigger;
+
+			return {
+				validate: validate,
+				delay: delay
+			};
 		},
 
 		/**
