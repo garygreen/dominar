@@ -50,7 +50,7 @@ Dominar.register('uppercase', function(value) {
 Use `remoteRule` which takes a deferred object (as does `$.ajax` and `$.get` etc).
 
 ```javascript
-var dominar = $('form', {
+var dominar = new Dominar($('form'), {
    username: {
       rules: 'required',
       remoteRule: function(desiredUsername) {
