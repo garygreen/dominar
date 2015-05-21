@@ -35,6 +35,7 @@
 	Dominar.prototype = {
 
 		defaults: {
+			container: '.form-group',
 			delay: 300,
 			delayTriggers: ['keyup'],
 			rules: '',
@@ -249,7 +250,7 @@
 		this.name = name;
 		this.options = options;
 		this.$field = $field;
-		this.$container = $field.closest(this.options.container || '.form-group');
+		this.$container = $field.closest(this.options.container);
 		this.$message = this.options.message ? this.getMessageElement() : $();
 		this.$feedback = this.options.feedback ? this.getFeedbackElement() : $();
 	};

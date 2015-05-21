@@ -25,6 +25,7 @@
 		it('should default options to', function() {
 
 			assert.deepEqual(Dominar.prototype.defaults, {
+				container: '.form-group',
 				delay: 300,
 				delayTriggers: ['keyup'],
 				rules: '',
