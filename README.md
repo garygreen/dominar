@@ -94,11 +94,11 @@ On **your server** return HTTP status code 200 if validation passes or if not, a
 By default error messages are automatically generated for you. If you would like to customise, use the `customMessages` option to specify a custom error message for the rules.
 
 ```javascript
-'username': {
-   'rules': 'required|min:5',
-   'customMessages': {
-      'required': 'Whoops, :attribute field is required!',
-      'min': 'This needs more characters :('
+username: {
+   rules: 'required|min:5',
+   customMessages: {
+      required: 'Whoops, :attribute field is required!',
+      min: 'This needs more characters :('
    }
 }
 ```
