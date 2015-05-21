@@ -28,12 +28,35 @@ By default it is assumed your element is contained inside a `.form-group`
 
 ```html
 <div class="form-group">
-	<label>Username</label>
-	<input type="text" name="username"/>
+   <label>Username</label>
+   <input type="text" name="username"/>
 </div>
 ```
 
 You can change this by supplying the `container` option e.g. `container: 'td'`
+
+### Available validation rules
+
+* `accepted`
+* `alpha`
+* `alpha_dash`
+* `alpha_num`
+* `confirmed`
+* `digits:value`
+* `different:attribute`
+* `email`
+* `in:foo,bar,..`
+* `integer`
+* `max:value`
+* `not_in:foo,bar,..`
+* `numeric`
+* `required`
+* `same:attribute`
+* `size:value`
+* `url`
+* `regex:pattern`
+
+See [here](https://github.com/skaterdav85/validatorjs#validation-rules) for more rules & usage details.
 
 ### Custom validation rule
 
@@ -41,7 +64,7 @@ Add a custom validation rule:
 
 ```javascript
 Dominar.register('uppercase', function(value) {
-	return value.toUpperCase() === value;
+   return value.toUpperCase() === value;
 }, 'The :attribute must only be uppercase.');
 ```
 
@@ -72,8 +95,8 @@ Just manually add anywhere inside your `.form-group` a `.help-block` and dominar
 
 ```html
 <div class="form-group">
-	<div class="help-block"></div>
-	<input type="text" name="username"/>
+   <div class="help-block"></div>
+   <input type="text" name="username"/>
 </div>
 ```
 
