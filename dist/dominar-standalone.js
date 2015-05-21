@@ -538,9 +538,10 @@ if (typeof module !== 'undefined' && module.exports) {
 	}
 }(function($, Validator) {
 
-	function Dominar($form, options) {
+	function Dominar($form, options, config) {
 		this.$form = $form;
 		this.options = options || {};
+		this.config = config || $.extend({}, this.configDefaults, config);
 		this.fields = {};
 		this.bindEvents();
 	}
@@ -548,7 +549,9 @@ if (typeof module !== 'undefined' && module.exports) {
 	Dominar.prototype = {
 
 		defaults: {
+			container: '.form-group',
 			delay: 300,
+			delayTriggers: ['keyup'],
 			rules: '',
 			remoteRule: $.noop,
 			triggers: ['keyup', 'focusout', 'change'],
@@ -561,6 +564,10 @@ if (typeof module !== 'undefined' && module.exports) {
 			}
 		},
 
+		configDefaults: {
+			validateOnSubmit: true
+		},
+
 		DominarField: DominarField,
 
 		/**
@@ -571,7 +578,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		bindEvents: function() {
 			var dominar = this;
 			this.$form.on('keyup blur change', 'textarea, input, select', function(event) { dominar.fireValidate.call(dominar, event); });
-			this.$form.on('submit', function() { dominar.fireSubmit.call(dominar, event); });
+			this.$form.on('submit', function(event) { dominar.fireSubmit.call(dominar, event); });
 		},
 
 		/**
@@ -592,7 +599,7 @@ if (typeof module !== 'undefined' && module.exports) {
 			{
 				field = new this.DominarField(name, validating, this.getOptions(name));
 				this.fields[name] = field;
-				this.trigger('initField', field);
+				this.trigger('init-field', { dominarField: field });
 			}
 			return field;
 		},
@@ -626,11 +633,21 @@ if (typeof module !== 'undefined' && module.exports) {
 		 * Trigger event
 		 *
 		 * @param  {string} name
-		 * @param  {mixed} argument
-		 * @return {void}
+		 * @param  {object} data
+		 * @param  {function} callback
+		 * @return {$.Event}
 		 */
-		trigger: function(name, argument) {
-			this.$form.trigger('dominar.' + name, [argument]);
+		trigger: function(name, data, callback) {
+			var data = $.extend({}, { dominar: this }, data);
+			var event = $.Event('dominar.' + name, data);
+			this.$form.trigger(event);
+
+			if (callback && !event.isDefaultPrevented())
+			{
+				callback();
+			}
+
+			return event;
 		},
 
 		/**
@@ -644,13 +661,7 @@ if (typeof module !== 'undefined' && module.exports) {
 			var field = this.getField($element);
 			if (field)
 			{
-				var eventType = event.type;
-				var isKeyup = eventType == 'keyup';
-				if (((isKeyup && event.keyCode !== 9) || !isKeyup) && field.canTrigger(eventType))
-				{
-					if (isKeyup) this.validateDelayed($element);
-					else this.validate($element);
-				}
+				field.fireValidate(event);
 			}
 		},
 
@@ -661,10 +672,21 @@ if (typeof module !== 'undefined' && module.exports) {
 		 * @return {void}
 		 */
 		fireSubmit: function(event) {
-			event.preventDefault();
-			this.validateAll(function() {
-				event.target.submit();
-			});
+			var dominar = this;
+			if (dominar.config.validateOnSubmit)
+			{
+				var submitPassed = function() { event.target.submit(); };
+				var submitFailed = function() { dominar.trigger('submit-failed'); };
+				var submit = function() {
+					event.preventDefault();
+					dominar.validateAll(function() {
+						dominar.trigger('submit-passed', {}, submitPassed);
+					}, function() {
+						dominar.trigger('submit-failed', {}, submitFailed);
+					});
+				};
+				dominar.trigger('submit', {}, submit);
+			}
 		},
 
 		/**
@@ -742,7 +764,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		this.name = name;
 		this.options = options;
 		this.$field = $field;
-		this.$container = $field.closest(this.options.container || '.form-group');
+		this.$container = $field.closest(this.options.container);
 		this.$message = this.options.message ? this.getMessageElement() : $();
 		this.$feedback = this.options.feedback ? this.getFeedbackElement() : $();
 	};
@@ -819,6 +841,22 @@ if (typeof module !== 'undefined' && module.exports) {
 		},
 
 		/**
+		 * Fire validating from an event
+		 *
+		 * @param  {jQuery event} event
+		 * @return {void}
+		 */
+		fireValidate: function(event) {
+			var trigger = this.getTrigger(event);
+
+			if (trigger.validate)
+			{
+				if (trigger.delay) this.validateDelayed();
+				else this.validate();
+			}
+		},
+
+		/**
 		 * Get validation options (data, rules)
 		 *
 		 * @return {object}
@@ -886,17 +924,28 @@ if (typeof module !== 'undefined' && module.exports) {
 		},
 
 		/**
-		 * Determine if validation can be triggered from the given type (blur, change, etc)
+		 * Get trigger options from given jQuery event
 		 *
-		 * @param  {string} type
-		 * @return {boolean}
+		 * @param  {$.Event} jquery event
+		 * @return {object}
 		 */
-		canTrigger: function(type) {
-			if ($.isArray(this.options.triggers))
-			{
-				return $.inArray(type, this.options.triggers) > -1;
-			}
-			return false;
+		getTrigger: function(event) {
+			var eventType = event.type;
+			var isKeyup = eventType == 'keyup';
+			
+			// Determine if validation can be triggered by this event (change, keyup etc)
+			var trigger = $.inArray(eventType, this.options.triggers) > -1;
+
+			// Determine if we should validate with a delay
+			var delay = $.inArray(eventType, this.options.delayTriggers) > -1;
+
+			// Determine if validation should occur
+			var validate = ((isKeyup && event.keyCode !== 9) || !isKeyup) && trigger;
+
+			return {
+				validate: validate,
+				delay: delay
+			};
 		},
 
 		/**
