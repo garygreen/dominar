@@ -20,6 +20,16 @@ var validator = new Dominar($('form'), {
 
 **Note:** See below for all possible options. Only `rules` is required.
 
+### Demo
+
+http://garygreen.github.io/dominar/
+
+### Installation
+
+> bower install dominar --save
+
+The main file to include is `dist/dominar-standalone.js`. If you already have [validator.js](https://github.com/skaterdav85/validatorjs) installed then just simply use `dist/dominar.js`
+
 ---
 
 ### HTML Structure
