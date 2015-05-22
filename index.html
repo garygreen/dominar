@@ -80,6 +80,30 @@ var validator = new Dominar($('#customrule-demo-form'), {
 </script>
 
 
+<script type="text/template" id="tmpl-custommsg-demo">
+<form id="custommsg-demo-form">
+  <div class="form-group">
+    <label class="control-label">Username</label>
+    <input name="username" type="text" class="form-control"/>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</script>
+
+<script type="text/template" id="tmpl-custommsg-javascript">
+var validator = new Dominar($('#custommsg-demo-form'), {
+  username: {
+    rules: 'required|min:5|max:10',
+    customMessages: {
+      required: 'You forgot this field, silly!',
+      min: 'I need at least :min characters bro!',
+      max:' Whoops, :attribute needs to be less than :max characters!'
+    }
+  }
+});
+</script>
+
+
 <script type="text/template" id="tmpl-msgposition-demo">
 <form id="msgposition-demo-form">
   <div class="form-group">
@@ -242,6 +266,22 @@ var validator = new Dominar($('#remoterule-demo-form'), {
 						<div id="customrule-demo" class="tab-pane active" data-match></div>
 						<div id="customrule-html" class="tab-pane" data-match></div>
 						<div id="customrule-javascript" class="tab-pane" data-match></div>
+					</div>
+				</div>
+
+				<h3>Custom error messages</h3>
+
+				<div role="tabpanel">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#custommsg-demo" data-toggle="tab">Demo</a></li>
+						<li><a href="#custommsg-html" data-toggle="tab">HTML</a></li>
+						<li><a href="#custommsg-javascript" data-toggle="tab">Javascript</a></li>
+					</ul>
+
+					<div class="well tab-content">
+						<div id="custommsg-demo" class="tab-pane active" data-match></div>
+						<div id="custommsg-html" class="tab-pane" data-match></div>
+						<div id="custommsg-javascript" class="tab-pane" data-match></div>
 					</div>
 				</div>
 
