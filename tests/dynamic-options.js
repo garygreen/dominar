@@ -11,7 +11,7 @@ describe('dynamic validatorOptions tests', function() {
 			b: {
 				rules: 'test',
 				validatorOptions: function(options) {
-					if (dominar.getField('a').getValue().length) {
+					if (dominar.getField('a').getValue() == 'test1') {
 						options.rules = 'required|min:3|' + options.rules.b;
 					}
 					return options;
