@@ -59,4 +59,13 @@ describe('basic validation and option testing', function() {
 		].join(''));
 	});
 
+	it('should allow getting a field by name', function() {
+
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username"/></div></form>'), { username: {} });
+		var field = dominar.getField('username');
+		expect(field instanceof Dominar.DominarField).to.be.true;
+		expect(field.name).to.equal('username');
+
+	});
+
 });

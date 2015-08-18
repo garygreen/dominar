@@ -68,9 +68,15 @@
 		 * @return {DominarField|undefined}
 		 */
 		getField: function(validating) {
-			if (typeof validating === 'string')
+			
+			if (this.fields[validating])
 			{
 				return this.fields[validating];
+			}
+
+			if (typeof validating === 'string')
+			{
+				validating = this.$form.find('[name="' + validating + '"]');
 			}
 
 			var name = validating.attr('name');
@@ -212,7 +218,7 @@
 			for (var name in this.options)
 			{
 				dfd = $.Deferred();
-				field = this.getField(name) || this.getField(this.$form.find('[name="' + name + '"]'));
+				field = this.getField(name);
 				validators.push(dfd);
 				(function(field, dfd) {
 					field.validate(function() {
@@ -248,6 +254,8 @@
 		this.$message = this.options.message ? this.getMessageElement() : $();
 		this.$feedback = this.options.feedback ? this.getFeedbackElement() : $();
 	};
+
+	Dominar.DominarField = DominarField;
 
 	DominarField.prototype = {
 
