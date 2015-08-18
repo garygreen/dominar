@@ -1,6 +1,8 @@
 Dominar
 ====
 
+[![Build Status](https://travis-ci.org/garygreen/dominar.svg)](https://travis-ci.org/garygreen/dominar)
+
 Lightweight and highly configurable boostrap validator built on-top of [validator.js](https://github.com/skaterdav85/validatorjs).
 
 ### Usage
