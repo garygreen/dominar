@@ -1,16 +1,4 @@
-var assert, Dominar;
-
-if (typeof require !== 'undefined')
-{
-	assert = require('chai').assert,
-	Dominar = require('../src/dominar-standalone.js');
-}
-else
-{
-	// Browser testing support
-	assert  = window.chai.assert;
-	Dominar = window.Dominar;
-}
+var expect = window.chai.expect;
 
 describe('feedback tests', function() {
 
@@ -26,7 +14,7 @@ describe('feedback tests', function() {
 
 		var $username = $form.find('[name=username]');
 		dominar.validate($username);
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-error has-feedback">',
 				'<input name="username"><span class="form-control-feedback"><i class="glyphicon glyphicon-remove"></i></span>',
 			'</div>'
@@ -45,7 +33,7 @@ describe('feedback tests', function() {
 
 		var $username = $form.find('[name=username]');
 		dominar.validate($username);
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-error has-feedback">',
 				'<input name="username"><span class="help-block">The username field is required.</span>',
 				'<span class="form-control-feedback"><i class="glyphicon glyphicon-remove"></i></span>',
@@ -69,14 +57,14 @@ describe('feedback tests', function() {
 
 		var $username = $form.find('[name=username]');
 		dominar.validate($username);
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-error has-feedback">',
 				'<input name="username"><span class="form-control-feedback"><i class="custom-error-icon"></i></span>',
 			'</div>'
 		].join(''));
 
 		dominar.validate($username.val('test'));
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-success has-feedback">',
 				'<input name="username"><span class="form-control-feedback"><i class="custom-success-icon"></i></span>',
 			'</div>'

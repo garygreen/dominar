@@ -1,16 +1,4 @@
-var assert, Dominar;
-
-if (typeof require !== 'undefined')
-{
-	assert = require('chai').assert,
-	Dominar = require('../src/dominar-standalone.js');
-}
-else
-{
-	// Browser testing support
-	assert  = window.chai.assert;
-	Dominar = window.Dominar;
-}
+var expect = window.chai.expect;
 
 describe('initialisation', function() {
 
@@ -22,7 +10,7 @@ describe('initialisation', function() {
 
 	it('should default options to', function() {
 
-		assert.deepEqual(Dominar.prototype.defaults, {
+		expect(Dominar.prototype.defaults).to.deep.equal({
 			container: '.form-group',
 			delay: 300,
 			delayTriggers: ['keyup'],
@@ -42,7 +30,7 @@ describe('initialisation', function() {
 
 	it('should default config to', function() {
 
-		assert.deepEqual(Dominar.prototype.configDefaults, {
+		expect(Dominar.prototype.configDefaults).to.deep.equal({
 			validateOnSubmit: true
 		});
 
@@ -64,7 +52,7 @@ describe('basic validation and option testing', function() {
 
 		var $username = $form.find('[name=username]');
 		dominar.validate($username);
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<input name="username"><span class="help-block">The username field is required.</span>',
 			'</div>'

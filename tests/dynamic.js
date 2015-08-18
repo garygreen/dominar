@@ -1,16 +1,4 @@
-var assert, Dominar;
-
-if (typeof require !== 'undefined')
-{
-	assert = require('chai').assert,
-	Dominar = require('../src/dominar-standalone.js');
-}
-else
-{
-	// Browser testing support
-	assert  = window.chai.assert;
-	Dominar = window.Dominar;
-}
+var expect = window.chai.expect;
 
 describe('can add dynamic elements', function() {
 
@@ -45,7 +33,7 @@ describe('can add dynamic elements', function() {
 
 		dominar.validateAll();
 
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<table>',
 				'<thead>',
 					'<tr>',

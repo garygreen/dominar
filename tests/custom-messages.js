@@ -1,16 +1,4 @@
-var assert, Dominar;
-
-if (typeof require !== 'undefined')
-{
-	assert = require('chai').assert,
-	Dominar = require('../src/dominar-standalone.js');
-}
-else
-{
-	// Browser testing support
-	assert  = window.chai.assert;
-	Dominar = window.Dominar;
-}
+var expect = window.chai.expect;
 
 describe('custom messages tests', function() {
 
@@ -28,7 +16,7 @@ describe('custom messages tests', function() {
 		});
 
 		dominar.validate($form.find('input'));
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<input name="username">',
 				'<span class="help-block">username field is required you silly billy!</span>',
@@ -51,7 +39,7 @@ describe('custom messages tests', function() {
 
 		var $username = $form.find('[name=username]');
 		dominar.validate($username);
-		assert.equal($form.html(), [
+		expect($form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<span class="help-block test">The username field is required.</span>',
 				'<input name="username">',

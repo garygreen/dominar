@@ -12,17 +12,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-(function(factory) {
+(function(jQuery, Validator, factory) {
 
-	if (typeof exports !== 'undefined')
-	{
-		module.exports = factory;
-	}
-	else
-	{
-		window.Dominar = factory(jQuery, Validator);
-	}
-}(function($, Validator) {
+	window.Dominar = factory(jQuery, Validator);
+	
+}(jQuery, Validator, function(jQuery, Validator) {
 
 	function Dominar($form, options, config) {
 		this.$form = $form;

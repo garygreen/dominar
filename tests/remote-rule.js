@@ -1,16 +1,4 @@
-var assert, Dominar;
-
-if (typeof require !== 'undefined')
-{
-	assert = require('chai').assert,
-	Dominar = require('../src/dominar-standalone.js');
-}
-else
-{
-	// Browser testing support
-	assert  = window.chai.assert;
-	Dominar = window.Dominar;
-}
+var expect = window.chai.expect;
 
 describe('async remote rule testing', function() {
 
@@ -32,7 +20,7 @@ describe('async remote rule testing', function() {
 
 		var $username = $form.find('[name=username]');
 		dominar.validate($username, $.noop, function() {
-			assert.equal($form.html(), [
+			expect($form.html()).to.equal([
 				'<div class="form-group has-error">',
 					'<input name="username">',
 					'<span class="help-block">Username is already taken.</span>',
@@ -62,7 +50,7 @@ describe('async remote rule testing', function() {
 
 		var $username = $form.find('[name=username]').val('testing');
 		dominar.validate($username, function() {
-			assert.equal($form.html(), [
+			expect($form.html()).to.equal([
 				'<div class="form-group has-success">',
 					'<input name="username">',
 					'<span class="help-block"></span>',
