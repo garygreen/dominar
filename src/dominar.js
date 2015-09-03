@@ -152,8 +152,7 @@
 		 * @return {void}
 		 */
 		fireValidate: function(event) {
-			var $element = $(event.target);
-			var field = this.getField($element);
+			var field = this.getField(event.target.name);
 			if (field)
 			{
 				field.fireValidate(event);
@@ -304,13 +303,16 @@
 			}
 			this.validator = this.getValidator();
 
+			field.validatedValue = undefined;
+
 			$.when(validate, this.options.remoteRule(value))
 			.done(function() {
 				field.showSuccess();
+				field.validatedValue = value;
 				passes();
 			})
 			.fail(function(error) {
-				if (typeof error !== 'string')
+				if (typeof error !== 'undefined' && typeof error !== 'string')
 				{
 					error = error.responseJSON.message;
 				}
@@ -432,13 +434,30 @@
 		 * @return {mixed}
 		 */
 		getValue: function() {
-			var $field = this.$field;
-			var type = $field[0].type;
+			var type = this.$field[0].type;
 			if (type == 'radio' || type == 'checkbox')
 			{
-				$field = $field.filter(':checked');
+				var $checkedFields = this.$field.filter(':checked');
+
+				if (type == 'radio')
+				{
+					return $checkedFields.val();
+				}
+
+				return $checkedFields.map(function() {
+					return this.value;
+				}).get();
 			}
-			return $field.val();
+			return this.$field.val();
+		},
+
+		/**
+		 * Get the last validated value.
+		 *
+		 * @return {mixed}
+		 */
+		getValidatedValue: function() {
+			return this.validatedValue;
 		},
 
 		/**
