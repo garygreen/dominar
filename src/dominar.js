@@ -432,7 +432,13 @@
 		 * @return {mixed}
 		 */
 		getValue: function() {
-			return this.$field.val();
+			var $field = this.$field;
+			var type = $field[0].type;
+			if (type == 'radio' || type == 'checkbox')
+			{
+				$field = $field.filter(':checked');
+			}
+			return $field.val();
 		},
 
 		/**
