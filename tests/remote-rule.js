@@ -4,8 +4,7 @@ describe('async remote rule testing', function() {
 
 	it('should call error callback', function(done) {
 
-		var $form;
-		var dominar = new Dominar($form = $('<form><div class="form-group"><input name="username"/></div></form>'), {
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), {
 			username: {
 				feedback: false,
 				remoteRule: function() {
@@ -18,9 +17,9 @@ describe('async remote rule testing', function() {
 			}
 		});
 
-		var $username = $form.find('[name=username]');
+		var $username = dominar.$form.find('[name=username]');
 		dominar.validate($username, $.noop, function() {
-			expect($form.html()).to.equal([
+			expect(dominar.$form.html()).to.equal([
 				'<div class="form-group has-error">',
 					'<input name="username">',
 					'<span class="help-block">Username is already taken.</span>',
@@ -34,8 +33,7 @@ describe('async remote rule testing', function() {
 
 	it('should call success callback', function(done) {
 
-		var $form;
-		var dominar = new Dominar($form = $('<form><div class="form-group"><input name="username"/></div></form>'), {
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), {
 			username: {
 				feedback: false,
 				remoteRule: function() {
@@ -48,9 +46,9 @@ describe('async remote rule testing', function() {
 			}
 		});
 
-		var $username = $form.find('[name=username]').val('testing');
+		var $username = dominar.$form.find('[name=username]').val('testing');
 		dominar.validate($username, function() {
-			expect($form.html()).to.equal([
+			expect(dominar.$form.html()).to.equal([
 				'<div class="form-group has-success">',
 					'<input name="username">',
 					'<span class="help-block"></span>',
