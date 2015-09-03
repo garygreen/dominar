@@ -41,30 +41,71 @@ describe('initialisation', function() {
 describe('basic validation and option testing', function() {
 
 	it('should show just error', function() {
-		var $form;
-		var dominar = new Dominar($form = $('<form><div class="form-group"><input name="username"/></div></form>'), {
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), {
 			username: {
-				rules: 'required|min:1',
+				rules: 'required',
 				feedback: false,
 				message: true
 			}
 		});
 
-		var $username = $form.find('[name=username]');
+		var $username = dominar.$form.find('[name=username]');
 		dominar.validate($username);
-		expect($form.html()).to.equal([
+		expect(dominar.$form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<input name="username"><span class="help-block">The username field is required.</span>',
 			'</div>'
 		].join(''));
 	});
 
+	// it('should show error on keyup', function() {
+		
+	// 	var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), {
+	// 		username: {
+	// 			rules: 'required',
+	// 			feedback: false,
+	// 			message: false
+	// 		}
+	// 	});
+
+	// 	var spy = sinon.spy(dominar, 'validateDelayed');
+
+	// 	dominar.$form.find('input').trigger('keyup');
+
+	// 	setTimeout(function() {
+	// 		expect(spy.called).to.be.true
+	// 	}, 50);
+
+	// 	// console.log(dominar.$form.find('.form-group'));
+	// 	// setTimeout(function() {
+	// 	// 	expect(dominar.$form.find('.form-group').hasClass('has-error')).to.be.true;
+	// 	// }, 2000);
+	// });
+
 	it('should allow getting a field by name', function() {
 
-		var dominar = new Dominar($('<form><div class="form-group"><input name="username"/></div></form>'), { username: {} });
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), { username: {} });
 		var field = dominar.getField('username');
 		expect(field instanceof Dominar.DominarField).to.be.true;
 		expect(field.name).to.equal('username');
+
+	});
+
+	it('should be able to destroy', function() {
+
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), { username: {} });
+
+		dominar.getField('username').showError('test');
+
+		expect(dominar.$form.find('.form-group').hasClass('has-error')).to.be.true;
+		expect(dominar.$form.find('.form-control-feedback').length).to.equal(1);
+		expect(dominar.$form.find('.help-block').html()).to.equal('test');
+
+		dominar.destroy();
+
+		expect(dominar.$form.find('.form-group').hasClass('.has-error')).to.be.false;
+		expect(dominar.$form.find('.help-block').html().length).to.equal(0);
+		expect(dominar.$form.find('.form-control-feedback').html().length).to.equal(0);
 
 	});
 

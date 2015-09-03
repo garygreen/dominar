@@ -57,8 +57,17 @@
 		 */
 		bindEvents: function() {
 			var dominar = this;
-			this.$form.on('keyup blur change', 'textarea, input, select', function(event) { dominar.fireValidate.call(dominar, event); });
-			this.$form.on('submit', function(event) { dominar.fireSubmit.call(dominar, event); });
+			this.$form.on('keyup.dominar blur.dominar change.dominar', 'textarea, input, select', function(event) { dominar.fireValidate.call(dominar, event); });
+			this.$form.on('submit.dominar', function(event) { dominar.fireSubmit.call(dominar, event); });
+		},
+
+		/**
+		 * Unbind events.
+		 *
+		 * @return {void}
+		 */
+		unbindEvents: function() {
+			this.$form.off('.dominar');
 		},
 
 		/**
@@ -230,6 +239,21 @@
 			}
 
 			return $.when.apply($, validators).done(passes).fail(fails);
+		},
+
+		/**
+		 * Destroy dominar.
+		 *
+		 * @return {void}
+		 */
+		destroy: function() {
+			this.unbindEvents();
+			for (var i in this.fields)
+			{
+				this.fields[i].reset();
+			}
+
+			this.fields = {};
 		}
 
 	};
