@@ -432,13 +432,22 @@
 		 * @return {mixed}
 		 */
 		getValue: function() {
-			var $field = this.$field;
+			return this.getField().val();
+		},
+
+		/**
+		 * Get field
+		 *
+		 * @return {jQuery}
+		 */
+		getField: function() {
+			var $field = this.$container.find('[name="' + this.name + '"]');
 			var type = $field[0].type;
 			if (type == 'radio' || type == 'checkbox')
 			{
-				$field = $field.filter(':checked');
+				return $field.filter(':checked');
 			}
-			return $field.val();
+			return $field;
 		},
 
 		/**
