@@ -22,7 +22,7 @@ function Dominar($form, options, config) {
 	this.options = options || {};
 	this.config = config || $.extend({}, this.configDefaults, config);
 	this.fields = {};
-	this.bindEvents();
+	this._bindEvents();
 }
 
 Dominar.prototype = {
@@ -52,10 +52,10 @@ Dominar.prototype = {
 	 *
 	 * @return {void}
 	 */
-	bindEvents: function() {
+	_bindEvents: function() {
 		var dominar = this;
-		this.$form.on('keyup.dominar blur.dominar change.dominar', 'textarea, input, select', function(event) { dominar.fireValidate.call(dominar, event); });
-		this.$form.on('submit.dominar', function(event) { dominar.fireSubmit.call(dominar, event); });
+		this.$form.on('keyup.dominar blur.dominar change.dominar', 'textarea, input, select', function(event) { dominar._fireValidate.call(dominar, event); });
+		this.$form.on('submit.dominar', function(event) { dominar._fireSubmit.call(dominar, event); });
 	},
 
 	/**
@@ -63,7 +63,7 @@ Dominar.prototype = {
 	 *
 	 * @return {void}
 	 */
-	unbindEvents: function() {
+	_unbindEvents: function() {
 		this.$form.off('.dominar');
 	},
 
@@ -89,9 +89,9 @@ Dominar.prototype = {
 		var field = this.fields[name];
 		if (!field && this.options[name])
 		{
-			field = new DominarField(name, validating, this.getOptions(name));
+			field = new DominarField(name, validating, this._getOptions(name));
 			this.fields[name] = field;
-			this.trigger('init-field', { dominarField: field });
+			this._trigger('init-field', { dominarField: field });
 		}
 		return field;
 	},
@@ -102,7 +102,7 @@ Dominar.prototype = {
 	 * @param  {string} name
 	 * @return {object}
 	 */
-	getOptions: function(name) {
+	_getOptions: function(name) {
 		var options = this.options[name];
 		return $.extend({}, this.defaults, options);
 	},
@@ -129,7 +129,7 @@ Dominar.prototype = {
 	 * @param  {function} callback
 	 * @return {$.Event}
 	 */
-	trigger: function(name, data, callback) {
+	_trigger: function(name, data, callback) {
 		var data = $.extend({}, { dominar: this }, data);
 		var event = $.Event('dominar.' + name, data);
 		this.$form.trigger(event);
@@ -148,11 +148,11 @@ Dominar.prototype = {
 	 * @param  {jquery event} event
 	 * @return {void}
 	 */
-	fireValidate: function(event) {
+	_fireValidate: function(event) {
 		var field = this.getField(event.target.name);
 		if (field)
 		{
-			field.fireValidate(event);
+			field._fireValidate(event);
 		}
 	},
 
@@ -162,21 +162,21 @@ Dominar.prototype = {
 	 * @param  {jquery event} event
 	 * @return {void}
 	 */
-	fireSubmit: function(event) {
+	_fireSubmit: function(event) {
 		var dominar = this;
 		if (dominar.config.validateOnSubmit)
 		{
 			var submitPassed = function() { event.target.submit(); };
-			var submitFailed = function() { dominar.trigger('submit-failed'); };
+			var submitFailed = function() { dominar._trigger('submit-failed'); };
 			var submit = function() {
 				event.preventDefault();
 				dominar.validateAll(function() {
-					dominar.trigger('submit-passed', {}, submitPassed);
+					dominar._trigger('submit-passed', {}, submitPassed);
 				}, function() {
-					dominar.trigger('submit-failed', {}, submitFailed);
+					dominar._trigger('submit-failed', {}, submitFailed);
 				});
 			};
-			dominar.trigger('submit', {}, submit);
+			dominar._trigger('submit', {}, submit);
 		}
 	},
 
@@ -243,7 +243,7 @@ Dominar.prototype = {
 	 * @return {void}
 	 */
 	destroy: function() {
-		this.unbindEvents();
+		this._unbindEvents();
 		for (var i in this.fields)
 		{
 			this.fields[i].reset();

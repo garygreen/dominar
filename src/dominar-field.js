@@ -10,8 +10,8 @@ function DominarField(name, $field, options) {
 	this.options = options;
 	this.$field = $field;
 	this.$container = $field.closest(this.options.container);
-	this.$message = this.options.message ? this.getMessageElement() : $();
-	this.$feedback = this.options.feedback ? this.getFeedbackElement() : $();
+	this.$message = this.options.message ? this._getMessageElement() : $();
+	this.$feedback = this.options.feedback ? this._getFeedbackElement() : $();
 };
 
 DominarField.prototype = {
@@ -25,7 +25,6 @@ DominarField.prototype = {
 	 */
 	validate: function(passes, fails) {
 
-		var name = this.getName();
 		var value = this.getValue();
 		var field = this;
 		var validate = $.Deferred();
@@ -60,7 +59,7 @@ DominarField.prototype = {
 		}
 		else
 		{
-			validate.reject(this.validator.errors.first(name));
+			validate.reject(this.validator.errors.first(this.name));
 		}
 	},
 
@@ -94,8 +93,8 @@ DominarField.prototype = {
 	 * @param  {jQuery event} event
 	 * @return {void}
 	 */
-	fireValidate: function(event) {
-		var trigger = this.getTrigger(event);
+	_fireValidate: function(event) {
+		var trigger = this._getTrigger(event);
 
 		if (trigger.validate)
 		{
@@ -110,7 +109,7 @@ DominarField.prototype = {
 	 * @return {object}
 	 */
 	getValidationOptions: function() {
-		var name = this.getName();
+		var name = this.name;
 		var data = {};
 		var rules = {};
 
@@ -154,15 +153,6 @@ DominarField.prototype = {
 	},
 
 	/**
-	 * Get name of field
-	 *
-	 * @return {string}
-	 */
-	getName: function() {
-		return this.name;
-	},
-
-	/**
 	 * Get value of field
 	 *
 	 * @return {mixed}
@@ -200,7 +190,7 @@ DominarField.prototype = {
 	 * @param  {$.Event} jquery event
 	 * @return {object}
 	 */
-	getTrigger: function(event) {
+	_getTrigger: function(event) {
 		var eventType = event.type;
 		var isKeyup = eventType == 'keyup';
 		
@@ -220,20 +210,11 @@ DominarField.prototype = {
 	},
 
 	/**
-	 * Get form field is for
-	 *
-	 * @return {jQuery}
-	 */
-	$form: function() {
-		return this.$container.closest('form');
-	},
-
-	/**
 	 * Get message element
 	 *
 	 * @return {jQuery}
 	 */
-	getMessageElement: function() {
+	_getMessageElement: function() {
 		var $message = this.$container.find('.help-block');
 		if ($message.length === 0)
 		{
@@ -247,7 +228,7 @@ DominarField.prototype = {
 	 *
 	 * @return {jQuery}
 	 */
-	getFeedbackElement: function() {
+	_getFeedbackElement: function() {
 		var $feedback = this.$container.find('.form-control-feedback');
 		if ($feedback.length === 0)
 		{
