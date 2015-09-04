@@ -47,8 +47,6 @@ Dominar.prototype = {
 		validateOnSubmit: true
 	},
 
-	DominarField: DominarField,
-
 	/**
 	 * Bind events
 	 *
@@ -91,7 +89,7 @@ Dominar.prototype = {
 		var field = this.fields[name];
 		if (!field && this.options[name])
 		{
-			field = new this.DominarField(name, validating, this.getOptions(name));
+			field = new DominarField(name, validating, this.getOptions(name));
 			this.fields[name] = field;
 			this.trigger('init-field', { dominarField: field });
 		}
@@ -268,4 +266,5 @@ Dominar.register = function(rule, func, errorMessage) {
 	Validator.register(rule, func, errorMessage);
 };
 
+global.Dominar = Dominar;
 module.exports = Dominar;

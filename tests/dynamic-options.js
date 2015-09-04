@@ -1,4 +1,5 @@
 var expect = window.chai.expect;
+var Dominar = require('../src/dominar');
 
 describe('dynamic validatorOptions tests', function() {
 

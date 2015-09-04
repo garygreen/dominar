@@ -1,4 +1,6 @@
 var expect = window.chai.expect;
+var Dominar = require('../src/dominar');
+var DominarField = require('../src/dominar-field');
 
 describe('initialisation', function() {
 
@@ -6,6 +8,10 @@ describe('initialisation', function() {
 		var dominar = new Dominar($('<form/>'), {
 
 		});
+	});
+
+	it('should be globally available', function() {
+		expect(window.Dominar).to.be.defined;
 	});
 
 	it('should default options to', function() {
@@ -86,7 +92,7 @@ describe('basic validation and option testing', function() {
 
 		var dominar = new Dominar($('<form><div class="form-group"><input name="username"></div></form>'), { username: {} });
 		var field = dominar.getField('username');
-		expect(field instanceof Dominar.DominarField).to.be.true;
+		expect(field).to.be.instanceof(DominarField);
 		expect(field.name).to.equal('username');
 
 	});
