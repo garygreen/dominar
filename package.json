@@ -9,23 +9,28 @@
     "jquery": ">=1.7.2"
   },
   "devDependencies": {
+    "browserify": "^11.0.1",
     "chai": "^1.9.1",
-    "gulp": "^3.8.5",
-    "gulp-concat": "~2.5.2",
-    "gulp-header": "^1.0.5",
-    "gulp-uglify": "^0.3.1",
-    "gulp-rename": "~1.2.2",
     "karma": "~0.13.9",
     "karma-chai": "^0.1.0",
+    "karma-coverage": "~0.5.0",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
-    "phantomjs": "^1.9.17",
-    "del": "~1.1.1",
+    "karma-sinon": "~1.0.4",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.2.5",
-    "karma-coverage": "~0.5.0",
-    "karma-sinon": "~1.0.4"
+    "phantomjs": "^1.9.17",
+    "rimraf": "^2.4.2",
+    "uglify-js": "^2.4.24"
   },
   "scripts": {
-    "test": "karma start --single-run --browsers PhantomJS"
+    "test": "karma start --single-run --browsers PhantomJS",
+    "build": "npm run clean && npm run dist && npm run standalone",
+    "clean": "rimraf dist && mkdirp dist",
+    "dist": "browserify src/dominar.js --standalone Dominar -x validatorjs -o dist/dominar.js",
+    "standalone": "browserify src/dominar.js --standalone Dominar -o dist/dominar-standalone.js",
+    "min": "npm run min:dist && npm run min:standalone",
+    "min:dist": "uglifyjs dist/dominar.js --compress --mangle --screw-ie8 --comments /^!/ -o dist/dominar.min.js",
+    "min:standalone": "uglifyjs dist/dominar-standalone.js --compress --mangle --screw-ie8 --comments /^!/ -o dist/dominar-standalone.min.js"
   }
 }
