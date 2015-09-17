@@ -238,33 +238,57 @@ DominarField.prototype = {
 	},
 
 	/**
-	 * Show the given error message
+	 * Determine if given feedback type should be shown.
+	 *
+	 * @param  {string} type Type; error, success.
+	 * @return {boolean}
+	 */
+	_showFeedbackType: function(type) {
+		var feedback = this.options.feedback;
+		if (feedback instanceof Array)
+		{
+			return $.inArray(type, feedback) > -1;
+		}
+
+		return feedback;
+	},
+
+	/**
+	 * Show the given type.
+	 *
+	 * @param  {string} type    Type to show; success, error.
+	 * @param  {string} message Message to show.
+	 * @return {void}
+	 */
+	_show: function(type, message) {
+		this.reset();
+		this.$container.addClass('has-' + type);
+		if (this.options.message) this.$message.html(message || '');
+		if (this._showFeedbackType(type)) this.showFeedback(type);
+	},
+
+	/**
+	 * Show the given error message.
 	 *
 	 * @param  {string|undefined} message
 	 * @return {void}
 	 */
 	showError: function(message) {
-		this.reset();
-		this.$container.addClass('has-error');
-		if (this.options.message) this.$message.html(message || '');
-		if (this.options.feedback) this.showFeedback('error');
+		this._show('error', message);
 	},
 
 	/**
-	 * Show the given success message
+	 * Show the given success message.
 	 *
 	 * @param  {string|undefined} message
 	 * @return {void}
 	 */
 	showSuccess: function(message) {
-		this.reset();
-		this.$container.addClass('has-success');
-		if (this.options.message) this.$message.html(message || '');
-		if (this.options.feedback) this.showFeedback('success');
+		this._show('success', message);
 	},
 
 	/**
-	 * Show feedback of given type
+	 * Show feedback of given type.
 	 *
 	 * @param  {string} type Type; 'success' or 'error'
 	 * @return {void}
@@ -275,7 +299,7 @@ DominarField.prototype = {
 	},
 
 	/**
-	 * Reset any errors/success messages
+	 * Reset any errors/success messages.
 	 *
 	 * @return {void}
 	 */
