@@ -4,6 +4,7 @@
  */
 
 var Validator = require('validatorjs');
+var Utils = require('./utils');
 
 function DominarField(name, $field, options) {
 	this.name = name;
@@ -28,8 +29,8 @@ DominarField.prototype = {
 		var value = this.getValue();
 		var field = this;
 		var validate = $.Deferred();
-		passes = passes || $.noop;
-		fails = fails || $.noop;
+		passes = passes || Utils.noop;
+		fails = fails || Utils.noop;
 		if (this.validator)
 		{
 			delete this.validator;
@@ -74,8 +75,8 @@ DominarField.prototype = {
 
 		var field = this;
 		var delay = this.options.delay;
-		passes = passes || $.noop;
-		fails = fails || $.noop;
+		passes = passes || Utils.noop;
+		fails = fails || Utils.noop;
 		clearTimeout(this.delayTimer);
 		if (delay)
 		{
@@ -158,21 +159,26 @@ DominarField.prototype = {
 	 * @return {mixed}
 	 */
 	getValue: function() {
-		var type = this.$field[0].type;
+		var fields = this.$field.toArray();
+		var type = fields[0].type;
 		if (type == 'radio' || type == 'checkbox')
 		{
-			var $checkedFields = this.$field.filter(':checked');
+			for (var i = 0, len = fields.length, field, values = []; i < len; i++) {
+				field = fields[i];
+				if (field.checked)
+				{
+					values.push(field.value);
+				}
+			}
 
 			if (type == 'radio')
 			{
-				return $checkedFields.val();
+				return values.shift();
 			}
 
-			return $checkedFields.map(function() {
-				return this.value;
-			}).get();
+			return values;
 		}
-		return this.$field.val();
+		return fields[0].value;
 	},
 
 	/**
@@ -195,10 +201,10 @@ DominarField.prototype = {
 		var isKeyup = eventType == 'keyup';
 		
 		// Determine if validation can be triggered by this event (change, keyup etc)
-		var trigger = $.inArray(eventType, this.options.triggers) > -1;
+		var trigger = eventType.indexOf(this.options.triggers) > -1;
 
 		// Determine if we should validate with a delay
-		var delay = $.inArray(eventType, this.options.delayTriggers) > -1;
+		var delay = eventType.indexOf(this.options.delayTriggers) > -1;
 
 		// Determine if validation should occur
 		var validate = ((isKeyup && event.keyCode !== 9) || !isKeyup) && trigger;
@@ -247,7 +253,7 @@ DominarField.prototype = {
 		var feedback = this.options.feedback;
 		if (feedback instanceof Array)
 		{
-			return $.inArray(type, feedback) > -1;
+			return feedback.indexOf(type) > -1;
 		}
 
 		return feedback;

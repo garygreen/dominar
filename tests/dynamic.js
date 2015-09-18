@@ -3,7 +3,7 @@ var Dominar = require('../src/dominar');
 
 describe('can add dynamic elements', function() {
 
-	it('should add matched jQuery elements', function() {
+	it('should add matched array elements', function() {
 
 		var $form;
 		var dominar = new Dominar($form = $([
@@ -26,7 +26,7 @@ describe('can add dynamic elements', function() {
 			'</form>'
 		].join('')));
 
-		dominar.add($form.find('.user-name'), {
+		dominar.add($form.find('.user-name').toArray(), {
 			rules: 'required|min:1',
 			container: 'td',
 			feedback: false

@@ -1,6 +1,7 @@
 var expect = window.chai.expect;
 var Dominar = require('../src/dominar');
 var DominarField = require('../src/dominar-field');
+var Utils = require('../src/utils');
 
 describe('initialisation', function() {
 
@@ -21,7 +22,7 @@ describe('initialisation', function() {
 			delay: 300,
 			delayTriggers: ['keyup'],
 			rules: '',
-			remoteRule: $.noop,
+			remoteRule: Utils.noop,
 			triggers: ['keyup', 'focusout', 'change'],
 			message: true,
 			customMessages: {},

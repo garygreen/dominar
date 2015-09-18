@@ -16,6 +16,7 @@
 
 var Validator = require('validatorjs');
 var DominarField = require('./dominar-field');
+var Utils = require('./utils');
 
 function Dominar($form, options, config) {
 	this.$form = $form;
@@ -32,7 +33,7 @@ Dominar.prototype = {
 		delay: 300,
 		delayTriggers: ['keyup'],
 		rules: '',
-		remoteRule: $.noop,
+		remoteRule: Utils.noop,
 		triggers: ['keyup', 'focusout', 'change'],
 		message: true,
 		customMessages: {},
@@ -108,16 +109,27 @@ Dominar.prototype = {
 	},
 
 	/**
+	 * Find elements within the context of the form.
+	 *
+	 * @param  {string} selector
+	 * @return {Array}
+	 */
+	$: function(selector) {
+		return Utils.$(selector, this.$form);
+	},
+
+	/**
 	 * Add elements with given options
 	 *
-	 * @param {jQuery} $elements
+	 * @param {Array} elements
 	 * @param {object} options
 	 */
-	add: function($elements, options) {
+	add: function(elements, options) {
 		var dominar = this;
-		$elements.each(function() {
-			dominar.options[this.name] = options;
-		});
+		for (var i = 0, len = elements.length; i < len; i++)
+		{
+			dominar.options[elements[i].name] = options;
+		}
 		return this;
 	},
 
@@ -218,8 +230,8 @@ Dominar.prototype = {
 		var field;
 		var dfd;
 		var validators = [];
-		passes = passes || $.noop;
-		fails = fails || $.noop;
+		passes = passes || Utils.noop;
+		fails = fails || Utils.noop;
 		for (var name in this.options)
 		{
 			dfd = $.Deferred();
