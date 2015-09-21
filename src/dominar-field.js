@@ -42,14 +42,29 @@ DominarField.prototype = {
 
 		field.validatedValue = undefined;
 
-		validator.checkAsync(function() {
+		var passesHandler = function() {
 			field.showSuccess();
 			field.validatedValue = value;
 			passes();
-		}, function() {
+		};
+
+		var failsHandler = function() {
 			field.showError(validator.errors.first(field.name));
 			fails();
-		});
+		};
+
+		if (validator.hasAsync) {
+			return validator.checkAsync(passesHandler, failsHandler);
+		}
+		
+		if (validator.passes()) {
+			passesHandler();
+		}
+		else
+		{
+			failsHandler();
+		}
+		
 	},
 
 	/**
