@@ -85,11 +85,11 @@ Dominar.Validator.register('uppercase', function(value) {
 Use `Dominar.Validator.registerAsync` to register an asynchronous rule.
 
 ```javascript
-Dominar.registerAsync('username_availability', function(desiredUsername, attribute, parameters, passes) {
-   $.get('/api/check-username', { username: desiredUsername }, passes)
-   .fails(function(response) {
-      passes(false, response.message);
-   });
+Dominar.Validator.registerAsync('username_availability', function(username, attribute, parameters, passes) {
+   $.get('/api/check-username', { username: username }, passes)
+    .fails(function(response) {
+       passes(false, response.message);
+    });
 });
 
 var dominar = new Dominar($('form'), {
