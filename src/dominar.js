@@ -273,17 +273,7 @@ Dominar.prototype = {
 
 };
 
-/**
- * Register a custom validation rule
- *
- * @param  {string} rule
- * @param  {function} func
- * @param  {string} errorMessage
- * @return {void}
- */
-Dominar.register = function(rule, func, errorMessage) {
-	Validator.register(rule, func, errorMessage);
-};
+Dominar.Validator = Validator;
 
 global.Dominar = Dominar;
 module.exports = Dominar;

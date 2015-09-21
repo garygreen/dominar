@@ -36,10 +36,10 @@ describe('can add dynamic elements', function() {
 
 		var $tds = $form.find('td');
 		expect($tds.eq(0).hasClass('has-error')).to.be.true;
-		expect($tds.eq(0).find('.help-block').html()).to.equal('The users[0][name] field is required.');
+		expect($tds.eq(0).find('.help-block').html()).to.equal('The users 0 name field is required.');
 
 		expect($tds.eq(1).hasClass('has-error')).to.be.true;
-		expect($tds.eq(1).find('.help-block').html()).to.equal('The users[1][name] field is required.');
+		expect($tds.eq(1).find('.help-block').html()).to.equal('The users 1 name field is required.');
 	});
 
 });

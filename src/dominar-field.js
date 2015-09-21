@@ -32,40 +32,24 @@ DominarField.prototype = {
 
 		var value = this.getValue();
 		var field = this;
-		var validate = $.Deferred();
 		passes = passes || Utils.noop;
 		fails = fails || Utils.noop;
 		if (this.validator)
 		{
 			delete this.validator;
 		}
-		this.validator = this.getValidator();
+		var validator = this.validator = this.getValidator();
 
 		field.validatedValue = undefined;
 
-		$.when(validate, this.options.remoteRule(value))
-		.done(function() {
+		validator.checkAsync(function() {
 			field.showSuccess();
 			field.validatedValue = value;
 			passes();
-		})
-		.fail(function(error) {
-			if (typeof error !== 'undefined' && typeof error !== 'string')
-			{
-				error = error.responseJSON.message;
-			}
-			field.showError(error);
-			fails(error);
+		}, function() {
+			field.showError(validator.errors.first(field.name));
+			fails();
 		});
-
-		if (!this.validator || this.validator.passes())
-		{
-			validate.resolve();
-		}
-		else
-		{
-			validate.reject(this.validator.errors.first(this.name));
-		}
 	},
 
 	/**

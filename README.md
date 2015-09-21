@@ -75,22 +75,26 @@ See [here](https://github.com/skaterdav85/validatorjs#validation-rules) for more
 Add a custom validation rule:
 
 ```javascript
-Dominar.register('uppercase', function(value) {
+Dominar.Validator.register('uppercase', function(value) {
    return value.toUpperCase() === value;
 }, 'The :attribute must only be uppercase.');
 ```
 
 ### Asynchronous / Ajax validation rules
 
-Use `remoteRule` which takes a deferred object (like `$.ajax` and `$.get` returns).
+Use `Dominar.Validator.registerAsync` to register an asynchronous rule.
 
 ```javascript
+Dominar.registerAsync('username_availability', function(username, attribute, parameters, passes) {
+   $.get('/api/check-username', { username: desiredUsername }, passes)
+   .fails(function(response) {
+      passes(false, response.message);
+   });
+});
+
 var dominar = new Dominar($('form'), {
    username: {
-      rules: 'required',
-      remoteRule: function(desiredUsername) {
-         return $.get('/api/check-username', { username: desiredUsername });
-      }
+      rules: 'required|username_availability'
    }
 });
 ```
