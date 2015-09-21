@@ -6,13 +6,17 @@
 var Validator = require('validatorjs');
 var Utils = require('./utils');
 
-function DominarField(name, $field, options) {
+function DominarField(name, fields, options) {
 	this.name = name;
 	this.options = options;
-	this.$field = $field;
-	this.$container = $field.closest(this.options.container);
-	this.$message = this.options.message ? this._getMessageElement() : $();
-	this.$feedback = this.options.feedback ? this._getFeedbackElement() : $();
+	this.fields = fields;
+	this.container = Utils.element(this.fields[0]).closest(this.options.container);
+	if (this.options.message) {
+		this.message = this._getMessageElement();
+	}
+	if (this.options.feedback) {
+		this.feedback = this._getFeedbackElement();
+	}
 };
 
 DominarField.prototype = {
@@ -147,7 +151,7 @@ DominarField.prototype = {
 	/**
 	 * Get validation rules
 	 *
-	 * @return {string}
+	 * @return {object}
 	 */
 	getRules: function() {
 		return this.options.rules;
@@ -159,12 +163,11 @@ DominarField.prototype = {
 	 * @return {mixed}
 	 */
 	getValue: function() {
-		var fields = this.$field.toArray();
-		var type = fields[0].type;
+		var type = this.fields[0].type;
 		if (type == 'radio' || type == 'checkbox')
 		{
-			for (var i = 0, len = fields.length, field, values = []; i < len; i++) {
-				field = fields[i];
+			for (var i = 0, len = this.fields.length, field, values = []; i < len; i++) {
+				field = this.fields[i];
 				if (field.checked)
 				{
 					values.push(field.value);
@@ -178,7 +181,7 @@ DominarField.prototype = {
 
 			return values;
 		}
-		return fields[0].value;
+		return this.fields[0].value;
 	},
 
 	/**
@@ -218,29 +221,35 @@ DominarField.prototype = {
 	/**
 	 * Get message element
 	 *
-	 * @return {jQuery}
+	 * @return {Node}
 	 */
 	_getMessageElement: function() {
-		var $message = this.$container.find('.help-block');
-		if ($message.length === 0)
+		var message = this.container.getElementsByClassName('help-block');
+		if (message.length)
 		{
-			$message = $('<span class="help-block"/>').insertAfter(this.$field);
+			return message[0];
 		}
-		return $message;
+
+		message = Utils.element('span').addClass('help-block');
+		this.container.appendChild(message.get());
+		return message.get();
 	},
 
 	/**
 	 * Get feedback element
 	 *
-	 * @return {jQuery}
+	 * @return {Node}
 	 */
 	_getFeedbackElement: function() {
-		var $feedback = this.$container.find('.form-control-feedback');
-		if ($feedback.length === 0)
+		var feedback = this.container.getElementsByClassName('form-control-feedback');
+		if (feedback.length)
 		{
-			$feedback = $('<span class="form-control-feedback"/>').insertAfter(this.$message.length ? this.$message : this.$field);
+			return feedback[0];
 		}
-		return $feedback;
+
+		feedback = Utils.element('span').addClass('form-control-feedback');
+		this.container.appendChild(feedback.get());
+		return feedback.get();
 	},
 
 	/**
@@ -268,8 +277,8 @@ DominarField.prototype = {
 	 */
 	_show: function(type, message) {
 		this.reset();
-		this.$container.addClass('has-' + type);
-		if (this.options.message) this.$message.html(message || '');
+		Utils.element(this.container).addClass('has-' + type);
+		if (this.options.message) this.message.innerHTML = message || '';
 		if (this._showFeedbackType(type)) this.showFeedback(type);
 	},
 
@@ -300,8 +309,8 @@ DominarField.prototype = {
 	 * @return {void}
 	 */
 	showFeedback: function(type) {
-		this.$container.addClass('has-feedback');
-		this.$feedback.html(this.options.feedbackIcons[type]);
+		Utils.element(this.container).addClass('has-feedback');
+		this.feedback.innerHTML = this.options.feedbackIcons[type];
 	},
 
 	/**
@@ -310,9 +319,15 @@ DominarField.prototype = {
 	 * @return {void}
 	 */
 	reset: function() {
-		this.$container.removeClass('has-error has-success has-feedback');
-		this.$message.empty();
-		this.$feedback.empty();
+		Utils.element(this.container).removeClass('has-error has-success has-feedback');
+		
+		if (this.message) {
+			this.message.innerHTML = '';
+		}
+
+		if (this.feedback) {
+			this.feedback.innerHTML = '';
+		}
 	}
 
 };

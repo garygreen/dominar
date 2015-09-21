@@ -6,7 +6,7 @@ describe('event tests', function() {
 	this.timeout(100);
 
 	beforeEach(function() {
-		this.dominar = new Dominar($('<form><input name="username" type="text"></form>'), { username: { rules: 'required' } });
+		this.dominar = new Dominar($('<form><div class="form-group"><input name="username" type="text"></div></form>'), { username: { rules: 'required' } });
 		this.dominar.$form.on('submit', function(event) {
 			event.preventDefault();
 		});
@@ -23,7 +23,7 @@ describe('event tests', function() {
 
 		dominar.$form.bind('dominar.init-field', function(event) {
 			expect(event.dominar).to.equal(dominar);
-			expect(event.dominarField.$field.attr('name')).to.equal('username');
+			expect(event.dominarField.fields[0].name).to.equal('username');
 			done();
 		});
 

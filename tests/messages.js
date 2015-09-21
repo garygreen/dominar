@@ -37,7 +37,7 @@ describe('custom messages tests', function() {
 			}
 		});
 
-		dominar.validate(dominar.$form.find('input'));
+		dominar.validate('username');
 		expect(dominar.$form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<input name="username">',
@@ -59,8 +59,7 @@ describe('custom messages tests', function() {
 			}
 		});
 
-		var $username = $form.find('[name=username]');
-		dominar.validate($username);
+		dominar.validate('username');
 		expect($form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<span class="help-block test">The username field is required.</span>',

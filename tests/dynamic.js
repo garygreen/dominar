@@ -34,29 +34,12 @@ describe('can add dynamic elements', function() {
 
 		dominar.validateAll();
 
-		expect($form.html()).to.equal([
-			'<table>',
-				'<thead>',
-					'<tr>',
-						'<th>name</th>',
-					'</tr>',
-				'</thead>',
-				'<tbody>',
-					'<tr>',
-						'<td class="has-error">',
-							'<input name="users[0][name]" type="text" class="user-name">',
-							'<span class="help-block">The users[0][name] field is required.</span>',
-						'</td>',
-					'</tr>',
-					'<tr>',
-						'<td class="has-error">',
-							'<input name="users[1][name]" type="text" class="user-name">',
-							'<span class="help-block">The users[1][name] field is required.</span>',
-						'</td>',
-					'</tr>',
-				'</tbody>',
-			'</table>',
-		].join(''));
+		var $tds = $form.find('td');
+		expect($tds.eq(0).hasClass('has-error')).to.be.true;
+		expect($tds.eq(0).find('.help-block').html()).to.equal('The users[0][name] field is required.');
+
+		expect($tds.eq(1).hasClass('has-error')).to.be.true;
+		expect($tds.eq(1).find('.help-block').html()).to.equal('The users[1][name] field is required.');
 	});
 
 });

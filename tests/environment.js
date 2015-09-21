@@ -56,8 +56,7 @@ describe('basic validation and option testing', function() {
 			}
 		});
 
-		var $username = dominar.$form.find('[name=username]');
-		dominar.validate($username);
+		dominar.validate('username');
 		expect(dominar.$form.html()).to.equal([
 			'<div class="form-group has-error">',
 				'<input name="username"><span class="help-block">The username field is required.</span>',

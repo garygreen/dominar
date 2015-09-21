@@ -15,8 +15,7 @@ describe('container tests', function() {
 			}
 		});
 
-		var $username = $form.find('[name=username]');
-		dominar.validate($username);
+		dominar.validate('username');
 		expect($form.html()).to.equal([
 			'<table>',
 				'<tbody>',

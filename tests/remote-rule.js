@@ -18,8 +18,7 @@ describe('async remote rule testing', function() {
 			}
 		});
 
-		var $username = dominar.$form.find('[name=username]');
-		dominar.validate($username, $.noop, function() {
+		dominar.validate('username', $.noop, function() {
 			expect(dominar.$form.html()).to.equal([
 				'<div class="form-group has-error">',
 					'<input name="username">',
@@ -47,8 +46,8 @@ describe('async remote rule testing', function() {
 			}
 		});
 
-		var $username = dominar.$form.find('[name=username]').val('testing');
-		dominar.validate($username, function() {
+		dominar.$form.find('[name=username]').val('testing');
+		dominar.validate('username', function() {
 			expect(dominar.$form.html()).to.equal([
 				'<div class="form-group has-success">',
 					'<input name="username">',

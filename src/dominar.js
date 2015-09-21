@@ -71,26 +71,33 @@ Dominar.prototype = {
 	/**
 	 * Get existing or new dominar field for element
 	 *
-	 * @param  {string|jQuery} validating
+	 * @param  {string|Node} element
 	 * @return {DominarField|undefined}
 	 */
-	getField: function(validating) {
+	getField: function(element) {
 		
-		if (this.fields[validating])
+		if (typeof element === 'string') {
+			element = this.$('[name="' + element + '"]');
+
+			if (!element.length) {
+				return;
+			}
+		}
+		else 
 		{
-			return this.fields[validating];
+			element = [element];
 		}
 
-		if (typeof validating === 'string')
-		{
-			validating = this.$form.find('[name="' + validating + '"]');
-		}
-
-		var name = validating.attr('name');
+		var name = element[0].name;
 		var field = this.fields[name];
-		if (!field && this.options[name])
+		if (field)
 		{
-			field = new DominarField(name, validating, this._getOptions(name));
+			return field;
+		}
+
+		if (this.options[name])
+		{
+			field = new DominarField(name, element, this._getOptions(name));
 			this.fields[name] = field;
 			this._trigger('init-field', { dominarField: field });
 		}
@@ -115,7 +122,7 @@ Dominar.prototype = {
 	 * @return {Array}
 	 */
 	$: function(selector) {
-		return Utils.$(selector, this.$form);
+		return Utils.$(selector, this.$form[0]);
 	},
 
 	/**
@@ -195,26 +202,26 @@ Dominar.prototype = {
 	/**
 	 * Validate
 	 *
-	 * @param  {string|jQuery} name
+	 * @param  {string|Node} element
 	 * @param  {function} passes
 	 * @param  {function} fails
 	 * @return {void}
 	 */
-	validate: function(name, passes, fails) {
-		var field = this.getField(name);
+	validate: function(element, passes, fails) {
+		var field = this.getField(element);
 		if (field) field.validate(passes, fails);
 	},
 
 	/**
 	 * Validate with delay
 	 *
-	 * @param  {string|jQuery} name
+	 * @param  {string|Node} element
 	 * @param  {function} passes
 	 * @param  {function} fails
 	 * @return {void}
 	 */
-	validateDelayed: function(name, passes, fails) {
-		var field = this.getField(name);
+	validateDelayed: function(element, passes, fails) {
+		var field = this.getField(element);
 		if (field) field.validateDelayed(passes, fails);
 	},
 
