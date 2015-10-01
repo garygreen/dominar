@@ -2,6 +2,7 @@ var expect = window.chai.expect;
 var Dominar = require('../src/dominar');
 var DominarField = require('../src/dominar-field');
 var Utils = require('../src/utils');
+var Validator = require('validatorjs');
 
 describe('initialisation', function() {
 
@@ -40,6 +41,12 @@ describe('initialisation', function() {
 		expect(Dominar.prototype.configDefaults).to.deep.equal({
 			validateOnSubmit: true
 		});
+
+	});
+
+	it('should expose the validator', function() {
+
+		expect(Dominar.Validator).to.equal(Validator);
 
 	});
 

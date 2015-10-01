@@ -40,6 +40,7 @@ describe('can add dynamic elements', function() {
 
 		expect($tds.eq(1).hasClass('has-error')).to.be.true;
 		expect($tds.eq(1).find('.help-block').html()).to.equal('The users 1 name field is required.');
+
 	});
 
 });
