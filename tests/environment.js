@@ -39,7 +39,8 @@ describe('initialisation', function() {
 	it('should default config to', function() {
 
 		expect(Dominar.prototype.configDefaults).to.deep.equal({
-			validateOnSubmit: true
+			validateOnSubmit: true,
+			triggers: ['keyup', 'focusout', 'change']
 		});
 
 	});

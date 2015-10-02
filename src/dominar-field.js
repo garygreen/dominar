@@ -203,10 +203,10 @@ DominarField.prototype = {
 		var isKeyup = eventType == 'keyup';
 		
 		// Determine if validation can be triggered by this event (change, keyup etc)
-		var trigger = eventType.indexOf(this.options.triggers) > -1;
+		var trigger = this.options.triggers.indexOf(eventType) > -1;
 
 		// Determine if we should validate with a delay
-		var delay = eventType.indexOf(this.options.delayTriggers) > -1;
+		var delay = this.options.delayTriggers.indexOf(eventType) > -1;
 
 		// Determine if validation should occur
 		var validate = ((isKeyup && event.keyCode !== 9) || !isKeyup) && trigger;

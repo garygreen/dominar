@@ -21,7 +21,7 @@
     "karma-sinon": "~1.0.4",
     "mkdirp": "^0.5.1",
     "mocha": "^2.2.5",
-    "phantomjs": "^1.9.17",
+    "phantomjs": "~1.9.18",
     "rimraf": "^2.4.2",
     "uglify-js": "^2.4.24"
   },
