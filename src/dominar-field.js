@@ -6,11 +6,12 @@
 var Validator = require('validatorjs');
 var Utils = require('./utils');
 
-function DominarField(name, fields, options) {
+function DominarField(name, fields, options, dominar) {
 	this.name = name;
 	this.options = options;
 	this.fields = fields;
 	this.container = Utils.element(this.fields[0]).closest(this.options.container);
+	this.dominar = dominar;
 	if (this.options.message) {
 		this.message = this._getMessageElement();
 	}
@@ -120,6 +121,20 @@ DominarField.prototype = {
 		data[name] = this.getValue();
 		rules[name] = this.getRules();
 
+		var includeValues = this.options.includeValues || [];
+
+		if (this._hasRule('confirmed'))
+		{
+			var confirmedField = name + '_confirmation';
+			if (includeValues.indexOf(confirmedField) === -1) {
+				includeValues.push(confirmedField);
+			}
+		}
+
+		if (includeValues.length) {
+			data = $.extend(data, this.dominar._getFieldValues(includeValues));
+		}
+
 		if (rules[name].length === 0) delete rules[name];
 
 		var options = {
@@ -157,30 +172,31 @@ DominarField.prototype = {
 	},
 
 	/**
+	 * Determine if field has given validation rule.
+	 *
+	 * @param  {string}  rule
+	 * @return {boolean}
+	 */
+	_hasRule: function(rule) {
+		var rules = this.options.rules;
+		if (typeof rules === 'string') {
+			rules = rules.split('|');
+		}
+		var reg = new RegExp('^' + rule + '($|:)', 'i');
+		for (var i = 0, len = rules.length; i < len; i++) {
+			if (reg.test(rules[i])) return true;
+		}
+
+		return false;
+	},
+
+	/**
 	 * Get value of field
 	 *
 	 * @return {mixed}
 	 */
 	getValue: function() {
-		var type = this.fields[0].type;
-		if (type == 'radio' || type == 'checkbox')
-		{
-			for (var i = 0, len = this.fields.length, field, values = []; i < len; i++) {
-				field = this.fields[i];
-				if (field.checked)
-				{
-					values.push(field.value);
-				}
-			}
-
-			if (type == 'radio')
-			{
-				return values.shift();
-			}
-
-			return values;
-		}
-		return this.fields[0].value;
+		return Utils.elementValues(this.fields);
 	},
 
 	/**

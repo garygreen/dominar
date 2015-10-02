@@ -34,6 +34,35 @@ function matchesSelector(elem) {
 }
 
 /**
+ * Get field's values from given set of elements.
+ *
+ * @param  {array} fields
+ * @return {mixed}
+ */
+function elementValues(fields)
+{
+	var type = fields[0].type;
+	if (type == 'radio' || type == 'checkbox')
+	{
+		for (var i = 0, len = fields.length, field, values = []; i < len; i++) {
+			field = fields[i];
+			if (field.checked)
+			{
+				values.push(field.value);
+			}
+		}
+
+		if (type == 'radio')
+		{
+			return values.shift();
+		}
+
+		return values;
+	}
+	return fields[0].value;
+}
+
+/**
  * Element wrapper.
  *
  * @param {Node|string} element
@@ -143,5 +172,6 @@ Element.prototype = {
 module.exports = {
 	$: $,
 	element: function(element) { return new Element(element); },
-	noop: noop
+	noop: noop,
+	elementValues: elementValues
 };

@@ -109,11 +109,26 @@ Dominar.prototype = {
 
 		if (this.options[name])
 		{
-			field = new DominarField(name, element, this._getOptions(name));
+			field = new DominarField(name, element, this._getOptions(name), this);
 			this.fields[name] = field;
 			this._trigger('InitField', { dominarField: field });
 		}
 		return field;
+	},
+
+	/**
+	 * Get field values for given field names.
+	 *
+	 * @param  {array} names
+	 * @return {object}
+	 */
+	_getFieldValues: function(names) {
+		var values = {};
+		for (var i = 0, len = names.length, name; i < len; i++) {
+			name = names[i];
+			values[name] = Utils.elementValues(this.$('[name="' + name + '"]'));
+		}
+		return values;
 	},
 
 	/**
@@ -194,7 +209,7 @@ Dominar.prototype = {
 		{
 			return;
 		}
-		
+
 		var field = this.getField(event.target.name);
 		if (field)
 		{
