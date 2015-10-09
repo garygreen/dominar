@@ -38,7 +38,7 @@ describe('event tests', function() {
 
 	it('should fire a "dominarSubmit" event when form is submitted and allow it to be prevented.', function(done) {
 
-		this.dominar.form.removeEventListener(this.submitHandler);
+		this.dominar.form.removeEventListener('submit', this.submitHandler);
 
 		this.dominar.form.addEventListener('dominarSubmit', this.eventHandler = function(event) {
 			event.preventDefault();
@@ -56,7 +56,7 @@ describe('event tests', function() {
 
 		var dominar = this.dominar;
 
-		dominar.form.removeEventListener(this.submitHandler);
+		dominar.form.removeEventListener('submit', this.submitHandler);
 
 		var $username = $(dominar.form).find('input');
 		$username.val('test');

@@ -179,15 +179,8 @@ Dominar.prototype = {
 		var eventName = 'dominar' + name;
 		var data = data || {};
 		data.dominar = this;
-		if (window.CustomEvent)
-		{
-			var event = new CustomEvent(eventName, { detail: data });
-		}
-		else
-		{
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent(eventName, true, true, data);
-		}
+		var event = document.createEvent('CustomEvent');
+		event.initCustomEvent(eventName, true, true, data);
 		this.form.dispatchEvent(event);
 
 		if (callback && !event.defaultPrevented)
