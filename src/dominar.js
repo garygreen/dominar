@@ -16,10 +16,11 @@
 
 var Validator = require('validatorjs');
 var DominarField = require('./dominar-field');
+var forEach = require('async-foreach').forEach;
 var Utils = require('./utils');
 
-function Dominar($form, options, config) {
-	this.$form = $form;
+function Dominar(form, options, config) {
+	this.form = form;
 	this.options = options || {};
 	this.config = config || Utils.extend(this.configDefaults, config);
 	this.fields = {};
@@ -59,11 +60,11 @@ Dominar.prototype = {
 		var dominar = this;
 		for (var i = 0, len = this.config.triggers.length, trigger; i < len; i++) {
 			trigger = this.config.triggers[i];
-			this.$form[0].addEventListener(trigger, this.eventHandlers[trigger] = function(event) {
+			this.form.addEventListener(trigger, this.eventHandlers[trigger] = function(event) {
 				dominar._fireValidate.call(dominar, event);
 			});
 		}
-		this.$form[0].addEventListener('submit', this.eventHandlers.submit = function(event) {
+		this.form.addEventListener('submit', this.eventHandlers.submit = function(event) {
 			dominar._fireSubmit.call(dominar, event);
 		});
 	},
@@ -75,7 +76,7 @@ Dominar.prototype = {
 	 */
 	_unbindEvents: function() {
 		for (var eventType in this.eventHandlers) {
-			this.$form[0].removeEventListener(eventType, this.eventHandlers[eventType]);
+			this.form.removeEventListener(eventType, this.eventHandlers[eventType]);
 		}
 	},
 
@@ -148,7 +149,7 @@ Dominar.prototype = {
 	 * @return {Array}
 	 */
 	$: function(selector) {
-		return Utils.$(selector, this.$form[0]);
+		return Utils.$(selector, this.form);
 	},
 
 	/**
@@ -187,7 +188,7 @@ Dominar.prototype = {
 			var event = document.createEvent('CustomEvent');
 			event.initCustomEvent(eventName, true, true, data);
 		}
-		this.$form[0].dispatchEvent(event);
+		this.form.dispatchEvent(event);
 
 		if (callback && !event.defaultPrevented)
 		{
@@ -275,27 +276,23 @@ Dominar.prototype = {
 	 * @return {void}
 	 */
 	validateAll: function(passes, fails) {
-		var $element;
-		var field;
-		var dfd;
-		var validators = [];
 		passes = passes || Utils.noop;
 		fails = fails || Utils.noop;
-		for (var name in this.options)
-		{
-			dfd = $.Deferred();
-			field = this.getField(name);
-			validators.push(dfd);
-			(function(field, dfd) {
-				field.validate(function() {
-					dfd.resolve();
-				}, function(error) {
-					dfd.reject(error);
-				});
-			}(field, dfd));
-		}
 
-		return $.when.apply($, validators).done(passes).fail(fails);
+		var dominar = this;
+		var fields = Object.keys(this.options);
+		var passedCount = 0;
+		forEach(fields, function(item) {
+			var done = this.async();
+			var field = dominar.getField(item);
+			field.validate(function() {
+				passedCount++;
+				done();
+			}, done);
+		}, function(success) {
+			if (passedCount === fields.length) passes();
+			else fails();
+		});
 	},
 
 	/**

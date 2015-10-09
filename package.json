@@ -5,10 +5,11 @@
   "author": "Gary Green",
   "main": "dist/dominar-standalone.js",
   "dependencies": {
-    "validatorjs": "~2.0.1",
-    "jquery": ">=1.7.2"
+    "async-foreach": "^0.1.3",
+    "validatorjs": "~2.0.1"
   },
   "devDependencies": {
+    "jquery": ">=1.7.2",
     "browserify": "^11.0.1",
     "chai": "^1.9.1",
     "karma": "~0.13.9",

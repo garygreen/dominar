@@ -51,7 +51,7 @@ DominarField.prototype = {
 
 		var failsHandler = function() {
 			field.showError(validator.errors.first(field.name));
-			fails();
+			fails(validator.errors.first(field.name));
 		};
 
 		if (validator.hasAsync) {
@@ -211,7 +211,7 @@ DominarField.prototype = {
 	/**
 	 * Get trigger options from given jQuery event
 	 *
-	 * @param  {$.Event} jquery event
+	 * @param  {Event} jquery event
 	 * @return {object}
 	 */
 	_getTrigger: function(event) {

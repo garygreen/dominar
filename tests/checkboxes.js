@@ -16,12 +16,12 @@ describe('checkbox tests', function() {
 
 	it('should error', function() {
 
-		var dominar = new Dominar($(this.formHtml), { 'fruits[]': { rules: 'required|min:1' }});
+		var dominar = new Dominar($(this.formHtml)[0], { 'fruits[]': { rules: 'required|min:1' }});
 
 		dominar.validate('fruits[]');
 
 		var val = dominar.getField('fruits[]').getValue();
-		expect(dominar.$form.find('.form-group').hasClass('has-error')).to.be.true;
+		expect($(dominar.form).find('.form-group').hasClass('has-error')).to.be.true;
 		expect(val).to.be.instanceof(Array);
 		expect(val.length).to.equal(0);
 
@@ -29,12 +29,12 @@ describe('checkbox tests', function() {
 
 	it('should pass', function() {
 
-		var dominar = new Dominar($(this.formHtml), { 'fruits[]': { rules: 'required|min:1' }});
+		var dominar = new Dominar($(this.formHtml)[0], { 'fruits[]': { rules: 'required|min:1' }});
 
-		dominar.$form.find('input').prop('checked', true);
+		$(dominar.form).find('input').prop('checked', true);
 		dominar.validate('fruits[]');
 
-		expect(dominar.$form.find('.form-group').hasClass('has-success')).to.be.true;
+		expect($(dominar.form).find('.form-group').hasClass('has-success')).to.be.true;
 		expect(dominar.getField('fruits[]').getValue()).to.have.members(['apple', 'strawberry']);
 
 	});

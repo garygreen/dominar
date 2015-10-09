@@ -10,21 +10,21 @@ describe('event tests', function() {
 	};
 
 	beforeEach(function() {
-		this.dominar = new Dominar($('<form><div class="form-group"><input name="username" type="text"></div><button type="submit">Submit</button></form>'), { username: { rules: 'required' } });
-		this.dominar.$form[0].addEventListener('submit', this.submitHandler = function(event) {
+		this.dominar = new Dominar($('<form><div class="form-group"><input name="username" type="text"></div><button type="submit">Submit</button></form>')[0], { username: { rules: 'required' } });
+		this.dominar.form.addEventListener('submit', this.submitHandler = function(event) {
 			event.preventDefault();
 		});
 	});
 
 	afterEach(function() {
-		this.dominar.$form[0].removeEventListener(this.event, this.eventHandler);
+		this.dominar.form.removeEventListener(this.event, this.eventHandler);
 	});
 
 	it('should trigger a "dominarInitField" event when field is initialized', function(done) {
 
 		var dominar = this.dominar;
 
-		dominar.$form[0].addEventListener('dominarInitField', this.eventHandler = function(event) {
+		dominar.form.addEventListener('dominarInitField', this.eventHandler = function(event) {
 			expect(event.detail.dominar).to.equal(dominar);
 			expect(event.detail.dominarField.fields[0].name).to.equal('username');
 			done();
@@ -38,14 +38,14 @@ describe('event tests', function() {
 
 	it('should fire a "dominarSubmit" event when form is submitted and allow it to be prevented.', function(done) {
 
-		this.dominar.$form[0].removeEventListener(this.submitHandler);
+		this.dominar.form.removeEventListener(this.submitHandler);
 
-		this.dominar.$form[0].addEventListener('dominarSubmit', this.eventHandler = function(event) {
+		this.dominar.form.addEventListener('dominarSubmit', this.eventHandler = function(event) {
 			event.preventDefault();
 			done();
 		});
 
-		submit(this.dominar.$form[0]);
+		submit(this.dominar.form);
 
 		this.event = 'dominarSubmit';
 
@@ -56,18 +56,18 @@ describe('event tests', function() {
 
 		var dominar = this.dominar;
 
-		dominar.$form[0].removeEventListener(this.submitHandler);
+		dominar.form.removeEventListener(this.submitHandler);
 
-		var $username = dominar.$form.find('input');
+		var $username = $(dominar.form).find('input');
 		$username.val('test');
 
-		dominar.$form[0].addEventListener('dominarSubmitPassed', this.eventHandler = function(event) {
+		dominar.form.addEventListener('dominarSubmitPassed', this.eventHandler = function(event) {
 			event.preventDefault();
 			$username.val('');
 			done();
 		});
 
-		submit(dominar.$form[0]);
+		submit(dominar.form);
 
 		this.event = 'dominarSubmitPassed';
 
@@ -76,11 +76,11 @@ describe('event tests', function() {
 
 	it('should fire a "dominarSubmitFailed" event when form fails validation.', function(done) {
 
-		this.dominar.$form[0].addEventListener('dominarSubmitFailed', this.eventHandler = function(event) {
+		this.dominar.form.addEventListener('dominarSubmitFailed', this.eventHandler = function(event) {
 			done();
 		});
 
-		submit(this.dominar.$form[0]);
+		submit(this.dominar.form);
 
 		this.event = 'dominarSubmitFailed';
 

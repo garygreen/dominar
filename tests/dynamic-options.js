@@ -5,7 +5,7 @@ describe('dynamic validatorOptions tests', function() {
 
 	it('should should allow dynamic options', function() {
 
-		var dominar = new Dominar($form = $('<form><div class="form-group"><input name="a" value="test1"><input name="b" value="test2"></div></form>'), {
+		var dominar = new Dominar($('<form><div class="form-group"><input name="a" value="test1"><input name="b" value="test2"></div></form>')[0], {
 			a: {
 				rules: 'required'
 			},

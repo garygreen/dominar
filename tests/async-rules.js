@@ -13,7 +13,7 @@ describe('async rule testing', function() {
 			
 		});
 
-		var dominar = new Dominar($('<form><div class="form-group"><input name="username" value="test"></div></form>'), {
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username" value="test"></div></form>')[0], {
 			username: {
 				feedback: false,
 				rules: 'required|username-async-1'
@@ -21,7 +21,7 @@ describe('async rule testing', function() {
 		});
 
 		dominar.validate('username', $.noop, function() {
-			expect(dominar.$form.html()).to.equal([
+			expect($(dominar.form).html()).to.equal([
 				'<div class="form-group has-error">',
 					'<input name="username" value="test">',
 					'<span class="help-block">Username is already taken.</span>',
@@ -43,7 +43,7 @@ describe('async rule testing', function() {
 			
 		});
 
-		var dominar = new Dominar($('<form><div class="form-group"><input name="username" value="gary"></div></form>'), {
+		var dominar = new Dominar($('<form><div class="form-group"><input name="username" value="gary"></div></form>')[0], {
 			username: {
 				feedback: false,
 				rules: 'required|username-async-2'
@@ -51,7 +51,7 @@ describe('async rule testing', function() {
 		});
 
 		dominar.validate('username', function() {
-			expect(dominar.$form.html()).to.equal([
+			expect($(dominar.form).html()).to.equal([
 				'<div class="form-group has-success">',
 					'<input name="username" value="gary">',
 					'<span class="help-block"></span>',

@@ -5,8 +5,7 @@ describe('container tests', function() {
 
 	it('should allow override of container', function() {
 
-		var $form;
-		var dominar = new Dominar($form = $('<form><table><tr><td><input name="username" type="text"/></td></tr></table</form>'), {
+		var dominar = new Dominar($('<form><table><tr><td><input name="username" type="text"/></td></tr></table</form>')[0], {
 			username: {
 				rules: 'required|min:1',
 				container: 'td',
@@ -16,7 +15,7 @@ describe('container tests', function() {
 		});
 
 		dominar.validate('username');
-		expect($form.html()).to.equal([
+		expect($(dominar.form).html()).to.equal([
 			'<table>',
 				'<tbody>',
 					'<tr>',

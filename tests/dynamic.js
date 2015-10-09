@@ -24,9 +24,9 @@ describe('can add dynamic elements', function() {
 					'</tbody>',
 				'</table>',
 			'</form>'
-		].join('')));
+		].join(''))[0]);
 
-		dominar.add($form.find('.user-name').toArray(), {
+		dominar.add($(dominar.form).find('.user-name').toArray(), {
 			rules: 'required|min:1',
 			container: 'td',
 			feedback: false
@@ -34,7 +34,7 @@ describe('can add dynamic elements', function() {
 
 		dominar.validateAll();
 
-		var $tds = $form.find('td');
+		var $tds = $(dominar.form).find('td');
 		expect($tds.eq(0).hasClass('has-error')).to.be.true;
 		expect($tds.eq(0).find('.help-block').html()).to.equal('The users 0 name field is required.');
 
