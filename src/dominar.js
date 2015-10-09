@@ -221,10 +221,10 @@ Dominar.prototype = {
 		var dominar = this;
 		if (dominar.config.validateOnSubmit)
 		{
+			event.preventDefault();
 			var submitPassed = function() { event.target.submit(); };
 			var submitFailed = function() { dominar._trigger('SubmitFailed'); };
 			var submit = function() {
-				event.preventDefault();
 				dominar.validateAll(function() {
 					dominar._trigger('SubmitPassed', {}, submitPassed);
 				}, function() {
