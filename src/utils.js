@@ -24,6 +24,25 @@ function noop()
 }
 
 /**
+ * Super basic extend obj2 into obj1, overwriting obj1 on clashing keys.
+ *
+ * @param  {object} obj1
+ * @param  {object} obj2
+ * @return {object}
+ */
+function extend(obj1, obj2)
+{
+	var obj = {};
+	for (var i in obj1) {
+		obj[i] = obj1[i];
+	}
+	for (var i in obj2) {
+		obj[i] = obj2[i];
+	}
+	return obj;
+}
+
+/**
  * Get matches selector.
  *
  * @param  {Node} elem
@@ -173,5 +192,6 @@ module.exports = {
 	$: $,
 	element: function(element) { return new Element(element); },
 	noop: noop,
+	extend: extend,
 	elementValues: elementValues
 };

@@ -21,7 +21,7 @@ var Utils = require('./utils');
 function Dominar($form, options, config) {
 	this.$form = $form;
 	this.options = options || {};
-	this.config = config || $.extend({}, this.configDefaults, config);
+	this.config = config || Utils.extend(this.configDefaults, config);
 	this.fields = {};
 	this._bindEvents();
 }
@@ -33,7 +33,6 @@ Dominar.prototype = {
 		delay: 300,
 		delayTriggers: ['keyup'],
 		rules: '',
-		remoteRule: Utils.noop,
 		triggers: ['keyup', 'focusout', 'change'],
 		message: true,
 		customMessages: {},
@@ -139,7 +138,7 @@ Dominar.prototype = {
 	 */
 	_getOptions: function(name) {
 		var options = this.options[name];
-		return $.extend({}, this.defaults, options);
+		return Utils.extend(this.defaults, options);
 	},
 
 	/**
@@ -176,8 +175,9 @@ Dominar.prototype = {
 	 * @return {Event}
 	 */
 	_trigger: function(name, data, callback) {
-		var data = $.extend({}, { dominar: this }, data);
 		var eventName = 'dominar' + name;
+		var data = data || {};
+		data.dominar = this;
 		if (window.CustomEvent)
 		{
 			var event = new CustomEvent(eventName, { detail: data });

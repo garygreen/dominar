@@ -132,7 +132,7 @@ DominarField.prototype = {
 		}
 
 		if (includeValues.length) {
-			data = $.extend(data, this.dominar._getFieldValues(includeValues));
+			data = Utils.extend(data, this.dominar._getFieldValues(includeValues));
 		}
 
 		if (rules[name].length === 0) delete rules[name];
