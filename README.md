@@ -28,7 +28,13 @@ http://garygreen.github.io/dominar/
 
 ### Installation
 
+**Bower**
 > bower install dominar --save
+
+**NPM**
+> npm install dominar --save
+
+**Browser**
 
 The main file to include is `dist/dominar-standalone.js`. If you already have [validator.js](https://github.com/skaterdav85/validatorjs) installed then just simply use `dist/dominar.js`
 
