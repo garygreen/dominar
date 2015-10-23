@@ -40,19 +40,6 @@ The main file to include is `dist/dominar-standalone.js`. If you already have [v
 var validator = new Dominar(<form element>, <field options>, [dominar options]);
 ```
 
-### HTML Structure
-
-By default it is assumed your element is contained inside a `.form-group`
-
-```html
-<div class="form-group">
-   <label>Username</label>
-   <input type="text" name="username"/>
-</div>
-```
-
-You can change this by supplying the `container` option e.g. `container: 'td'`
-
 ### Available validation rules
 
 * `accepted`
@@ -109,6 +96,19 @@ On **your server** return HTTP status code 200 if validation passes or if not, a
 ```json
 {"message": "Username already taken."}
 ```
+
+### HTML Structure
+
+By default it is assumed your element is contained inside a `.form-group`
+
+```html
+<div class="form-group">
+   <label>Username</label>
+   <input type="text" name="username"/>
+</div>
+```
+
+You can change this by supplying the `container` option e.g. `container: 'td'`
 
 ### Custom error message
 
