@@ -8,7 +8,7 @@ Lightweight and highly configurable boostrap validator built on-top of [validato
 ### Usage
 
 ```javascript
-var validator = new Dominar($('form'), {
+var validator = new Dominar(document.getElementById('registration-form'), {
    email: {
       rules: 'required|email'
    },
@@ -33,6 +33,12 @@ http://garygreen.github.io/dominar/
 The main file to include is `dist/dominar-standalone.js`. If you already have [validator.js](https://github.com/skaterdav85/validatorjs) installed then just simply use `dist/dominar.js`
 
 ---
+
+### Main syntax
+
+```javascript
+var validator = new Dominar(<form element>, <field options>, [dominar options]);
+```
 
 ### HTML Structure
 
@@ -72,8 +78,6 @@ See [here](https://github.com/skaterdav85/validatorjs#validation-rules) for more
 
 ### Custom validation rule
 
-Add a custom validation rule:
-
 ```javascript
 Dominar.Validator.register('uppercase', function(value) {
    return value.toUpperCase() === value;
@@ -86,13 +90,14 @@ Use `Dominar.Validator.registerAsync` to register an asynchronous rule.
 
 ```javascript
 Dominar.Validator.registerAsync('username_availability', function(username, attribute, parameters, passes) {
+   // Below example assumes you are using jQuery.
    $.get('/api/check-username', { username: username }, passes)
     .fails(function(response) {
        passes(false, response.message);
     });
 });
 
-var dominar = new Dominar($('form'), {
+var dominar = new Dominar(document.getElementById('my-form'), {
    username: {
       rules: 'required|username_availability'
    }
@@ -137,6 +142,7 @@ Note: by default dominar will automatically add errors message straight after th
 If you want to change the default options you can simply overwrite on the prototype like in the below example. This is useful if you want to always use e.g. fontawesome icons instead of glyphicons. Of course these are just defaults and can still be customised on a per-field level.
 
 ```javascript
+// Below example assumes you are using jQuery.
 Dominar.prototype.defaults = $.extend({}, Dominar.prototype.defaults, {
    feedbackIcons: {
       error: '<i class="fa fa-remove"></i>',
@@ -145,7 +151,7 @@ Dominar.prototype.defaults = $.extend({}, Dominar.prototype.defaults, {
 });
 ```
 
-### Options
+### Field Options
 
 Option         | Type           | Description
 ---------------|----------------|-----------------------------------------------------------------------
@@ -158,30 +164,35 @@ message        | boolean        | Whether to display error messages or not
 customMessages | object         | Set custom error messages for the rules
 feedback       | boolean        | Whether to display feedback icon or not
 feedbackIcons  | object         | Configure the `success` and `error` feedback icons
-remoteRule     | function       | Asynchronous rule to run
+
+### Dominar options
+
+Option            | Type           | Description
+------------------|----------------|-----------------------------------------------------------------------
+validateOnSubmit  | boolean        | Whether to validate the form on submit.
 
 ## Events
 
 Dominar will fire various events on the `form`. You can listen for the events like:
 
 ```javascript
-$('#my-form').bind('dominar.init-field', function(event) {
-   var dominar = event.dominar;
-   var field = event.dominarField; // The DominarField which has been initialized
+document.getElementById('my-form').addEventListener('dominarInitField', function(event) {
+   var dominar = event.detail.dominar;    // The Dominar instance.
+   var field = event.detail.dominarField; // The DominarField which has been initialized.
 });
 ```
 
 The `submit` event allows you to prevent the validation from occuring by preventing the default action:
 
 ```javascript
-$('#my-form').bind('dominar.submit', function(event) {
+document.getElementById('my-form').addEventListener('dominarSubmit', function(event) {
    event.preventDefault(); // Prevent form from being validated
 });
 ```
 
 Name                  | Preventable | Description
 ----------------------|-------------|----------------------------------------------------------
-dominar.init-field    | No          | When a `DominarField` has been initialized (useful for adding additional event listeners to the input element etc)
-dominar.submit        | Yes         | When form is about to be submitted and before validation check has been run.
-dominar.submit-passed | Yes         | When form passed validation and is about to be submitted.
-dominar.submit-failed | No          | When failed validation check when form was attempted to be submitted.
+dominarInitField    | No          | When a `DominarField` has been initialized (useful for adding additional event listeners to the input element etc)
+dominarSubmit        | Yes         | When form is about to be submitted and before validation check has been run.
+dominarSubmitPassed | Yes         | When form passed validation and is about to be submitted.
+dominarSubmitFailed | No          | When failed validation check when form was attempted to be submitted.
