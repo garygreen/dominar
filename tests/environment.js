@@ -26,6 +26,7 @@ describe('initialisation', function() {
 			triggers: ['keyup', 'focusout', 'change'],
 			message: true,
 			customMessages: {},
+			customAttributes: {},
 			feedback: true,
 			feedbackIcons: {
 				success: '<i class="glyphicon glyphicon-check"></i>',

@@ -3,7 +3,7 @@ var Dominar = require('../src/dominar');
 
 describe('dynamic validatorOptions tests', function() {
 
-	it('should should allow dynamic options', function() {
+	it('should allow dynamic options', function() {
 
 		var dominar = new Dominar($('<form><div class="form-group"><input name="a" value="test1"><input name="b" value="test2"></div></form>')[0], {
 			a: {
@@ -30,7 +30,8 @@ describe('dynamic validatorOptions tests', function() {
 			rules: 'required|min:3|test',
 			customMessages: {
 				min: 'Silly, this should be at least :min characters.'
-			}
+			},
+			customAttributes: {}
 		});
 
 	});

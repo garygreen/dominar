@@ -109,7 +109,7 @@ DominarField.prototype = {
 	},
 
 	/**
-	 * Get validation options (data, rules)
+	 * Get validation options (data, rules, customMessages, customAttributes)
 	 *
 	 * @return {object}
 	 */
@@ -132,7 +132,8 @@ DominarField.prototype = {
 		var options = {
 			data: data,
 			rules: rules,
-			customMessages: this.options.customMessages
+			customMessages: this.options.customMessages,
+			customAttributes: this.options.customAttributes
 		};
 
 		if (this.options.validatorOptions)
@@ -176,6 +177,11 @@ DominarField.prototype = {
 	getValidator: function() {
 		var options = this.getValidationOptions();
 		var validator = new Validator(options.data, options.rules, options.customMessages);
+
+		if (options.customAttributes) {
+			validator.setAttributeNames(options.customAttributes);
+		}
+
 		return validator;
 	},
 
