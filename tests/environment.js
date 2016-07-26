@@ -39,6 +39,7 @@ describe('initialisation', function() {
 
 		expect(Dominar.prototype.configDefaults).to.deep.equal({
 			validateOnSubmit: true,
+			disableSubmit: false,
 			triggers: ['keyup', 'focusout', 'change']
 		});
 
