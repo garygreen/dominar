@@ -131,6 +131,12 @@ DominarField.prototype = {
 			}
 		}
 
+		var sameRuleOptions = this._getRuleOptions('same');
+		
+		if (sameRuleOptions) {
+			includeValues.push(sameRuleOptions.options[0]);
+		}
+
 		if (includeValues.length) {
 			data = Utils.extend(data, this.dominar._getFieldValues(includeValues));
 		}
@@ -178,16 +184,34 @@ DominarField.prototype = {
 	 * @return {boolean}
 	 */
 	_hasRule: function(rule) {
+		var ruleOptions = this._getRuleOptions(rule);
+
+		return ruleOptions ? true : false;
+	},
+
+	/**
+	 * Get options for the rule.
+	 *
+	 * @param  {string} rule
+	 * @return {object|undefined}
+	 */
+	_getRuleOptions: function(rule) {
 		var rules = this.options.rules;
 		if (typeof rules === 'string') {
 			rules = rules.split('|');
 		}
-		var reg = new RegExp('^' + rule + '($|:)', 'i');
-		for (var i = 0, len = rules.length; i < len; i++) {
-			if (reg.test(rules[i])) return true;
-		}
+		var reg = new RegExp('^' + rule + '(?:$|:(.*))', 'i');
+		for (var i = 0, len = rules.length, matches; i < len; i++) {
+			matches = reg.exec(rules[i]);
+			if (matches) {
+				var retObj = {
+					name: rule,
+					options: matches[1] === undefined ? undefined : matches[1].split(',')
+				};
 
-		return false;
+				return retObj;
+			}
+		}
 	},
 
 	/**

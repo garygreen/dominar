@@ -33,4 +33,20 @@ describe('includeValues option tests', function() {
 
 	});
 
+	it('should automatically include confirmation field with same rule', function(done) {
+
+		var dominar = new Dominar($('<form><div class="form-group"><input type="password" name="password" value="a"></div><div class="form-group"><input type="password" name="password_confirmation" value="a"><input type="password" name="password2" value="b"></div></form>')[0], {
+			password: {
+				rules: 'same:password2',
+				validatorOptions: function(options) {
+					expect(options.data.password2).to.equal('b');
+					done();
+				}
+			}
+		});
+
+		dominar.validateAll();
+
+	});
+
 });
