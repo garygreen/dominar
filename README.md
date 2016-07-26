@@ -130,6 +130,19 @@ username: {
 }
 ```
 
+## Custom attribute names
+
+By default attribute names are automatically generated in errors based on the name of the attribute. If you would like to override, use the `customAttributes` option:
+
+```javascript
+username: {
+   rules: 'required|min:5',
+   customAttributes: {
+      first_name: 'First Name'
+   }
+}
+```
+
 ### Customising placement of error messages
 
 Just manually add anywhere inside your `.form-group` a `.help-block` and dominar will automatically detect and use.
@@ -142,6 +155,10 @@ Just manually add anywhere inside your `.form-group` a `.help-block` and dominar
 ```
 
 Note: by default dominar will automatically add errors message straight after the `input` element.
+
+### Disable submit when failing validation
+
+Just set the `disableSubmit` config option on dominar. It can either be `true`, `false` or a selector-string to disable e.g. `.my-btn-to-disable`
 
 ### Changing default options
 
@@ -173,9 +190,10 @@ feedbackIcons  | object         | Configure the `success` and `error` feedback i
 
 ### Dominar options
 
-Option            | Type           | Description
-------------------|----------------|-----------------------------------------------------------------------
-validateOnSubmit  | boolean        | Whether to validate the form on submit.
+Option            | Type            | Description
+------------------|-----------------|-----------------------------------------------------------------------
+validateOnSubmit  | boolean         | Whether to validate the form on submit.
+disableSubmit     | boolean, string | Whether to disable the submit button when validation is failing. String indicates selector.
 
 ## Events
 
@@ -198,7 +216,7 @@ document.getElementById('my-form').addEventListener('dominarSubmit', function(ev
 
 Name                  | Preventable | Description
 ----------------------|-------------|----------------------------------------------------------
-dominarInitField    | No          | When a `DominarField` has been initialized (useful for adding additional event listeners to the input element etc)
-dominarSubmit        | Yes         | When form is about to be submitted and before validation check has been run.
-dominarSubmitPassed | Yes         | When form passed validation and is about to be submitted.
-dominarSubmitFailed | No          | When failed validation check when form was attempted to be submitted.
+dominarInitField      | No          | When a `DominarField` has been initialized (useful for adding additional event listeners to the input element etc)
+dominarSubmit         | Yes         | When form is about to be submitted and before validation check has been run.
+dominarSubmitPassed   | Yes         | When form passed validation and is about to be submitted.
+dominarSubmitFailed   | No          | When failed validation check when form was attempted to be submitted.
