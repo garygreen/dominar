@@ -1,6 +1,6 @@
 {
   "name": "dominar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lighweight and highly configurable bootstrap validator",
   "author": "Gary Green",
   "main": "dist/dominar-standalone.js",
