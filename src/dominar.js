@@ -220,7 +220,7 @@ Dominar.prototype = {
 	 */
 	_getDisableSubmitElement: function() {
 		
-		if (this.disableSubmit === false) {
+		if (this.config.disableSubmit === false) {
 			return;
 		}
 
@@ -244,11 +244,9 @@ Dominar.prototype = {
 			event.preventDefault();
 			var submitPassed = function() { event.target.submit(); };
 			var submitFailed = function() {
-				if (dominar.config.disableSubmit !== false) {
-					var submitElement = dominar._getDisableSubmitElement();
-					if (submitElement) {
-						submitElement.setAttribute('disabled', 'disabled');
-					}
+				var submitElement = dominar._getDisableSubmitElement();
+				if (submitElement) {
+					submitElement.setAttribute('disabled', 'disabled');
 				}
 
 				dominar._trigger('SubmitFailed');
