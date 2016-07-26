@@ -22,7 +22,7 @@ var Utils = require('./utils');
 function Dominar(form, options, config) {
 	this.form = form;
 	this.options = options || {};
-	this.config = config || Utils.extend(this.configDefaults, config);
+	this.config = Utils.extend(this.configDefaults, config);
 	this.fields = {};
 	this._bindEvents();
 }
