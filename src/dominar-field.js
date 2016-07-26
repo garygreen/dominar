@@ -114,34 +114,20 @@ DominarField.prototype = {
 	 * @return {object}
 	 */
 	getValidationOptions: function() {
-		var name = this.name;
 		var data = {};
 		var rules = {};
 
-		data[name] = this.getValue();
-		rules[name] = this.getRules();
+		data[this.name] = this.getValue();
+		rules[this.name] = this.getRules();
 
-		var includeValues = this.options.includeValues || [];
+		if (rules[this.name].length === 0) delete rules[this.name];
 
-		if (this._hasRule('confirmed'))
+		var includeValues = this._getIncludeValues();
+
+		if (includeValues.length)
 		{
-			var confirmedField = name + '_confirmation';
-			if (includeValues.indexOf(confirmedField) === -1) {
-				includeValues.push(confirmedField);
-			}
-		}
-
-		var sameRuleOptions = this._getRuleOptions('same');
-		
-		if (sameRuleOptions) {
-			includeValues.push(sameRuleOptions.options[0]);
-		}
-
-		if (includeValues.length) {
 			data = Utils.extend(data, this.dominar._getFieldValues(includeValues));
 		}
-
-		if (rules[name].length === 0) delete rules[name];
 
 		var options = {
 			data: data,
@@ -155,6 +141,31 @@ DominarField.prototype = {
 		}
 
 		return options;
+	},
+
+	/**
+	 * Get the additional attributes values to include when validating.
+	 *
+	 * @return {array}
+	 */
+	_getIncludeValues: function() {
+		var includeValues = this.options.includeValues || [];
+
+		if (this._hasRule('confirmed'))
+		{
+			var confirmedField = this.name + '_confirmation';
+			if (includeValues.indexOf(confirmedField) === -1) {
+				includeValues.push(confirmedField);
+			}
+		}
+
+		var sameRuleOptions = this._getRuleOptions('same');
+		
+		if (sameRuleOptions) {
+			includeValues.push(sameRuleOptions.options[0]);
+		}
+
+		return includeValues;
 	},
 
 	/**
