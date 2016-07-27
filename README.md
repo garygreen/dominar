@@ -156,10 +156,6 @@ Just manually add anywhere inside your `.form-group` a `.help-block` and dominar
 
 Note: by default dominar will automatically add errors message straight after the `input` element.
 
-### Disable submit when failing validation
-
-Just set the `disableSubmit` config option on dominar. It can either be `true`, `false` or a selector-string to disable e.g. `.my-btn-to-disable`
-
 ### Changing default options
 
 If you want to change the default options you can simply overwrite on the prototype like in the below example. This is useful if you want to always use e.g. fontawesome icons instead of glyphicons. Of course these are just defaults and can still be customised on a per-field level.
@@ -193,7 +189,6 @@ feedbackIcons  | object         | Configure the `success` and `error` feedback i
 Option            | Type            | Description
 ------------------|-----------------|-----------------------------------------------------------------------
 validateOnSubmit  | boolean         | Whether to validate the form on submit.
-disableSubmit     | boolean, string | Whether to disable the submit button when validation is failing. String indicates selector.
 
 ## Events
 
