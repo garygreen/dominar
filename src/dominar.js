@@ -47,7 +47,6 @@ Dominar.prototype = {
 
 	configDefaults: {
 		validateOnSubmit: true,
-		disableSubmit: false,
 		triggers: ['keyup', 'focusout', 'change']
 	},
 
@@ -214,24 +213,6 @@ Dominar.prototype = {
 	},
 
 	/**
-	 * Get the disable submit element.
-	 *
-	 * @return {element|undefined}
-	 */
-	_getDisableSubmitElement: function() {
-		
-		if (this.disableSubmit === false) {
-			return;
-		}
-
-		if (this.config.disableSubmit === true) {
-			return Utils.$('input[type=submit], button[type=submit]');
-		}
-
-		return Utils.$(this.disableSubmit);
-	},
-
-	/**
 	 * Fired submit event
 	 *
 	 * @param  {Event} event
@@ -243,16 +224,7 @@ Dominar.prototype = {
 		{
 			event.preventDefault();
 			var submitPassed = function() { event.target.submit(); };
-			var submitFailed = function() {
-				if (dominar.config.disableSubmit !== false) {
-					var submitElement = dominar._getDisableSubmitElement();
-					if (submitElement) {
-						submitElement.setAttribute('disabled', 'disabled');
-					}
-				}
-
-				dominar._trigger('SubmitFailed');
-			};
+			var submitFailed = function() { dominar._trigger('SubmitFailed'); };
 			var submit = function() {
 				dominar.validateAll(function() {
 					dominar._trigger('SubmitPassed', {}, submitPassed);
