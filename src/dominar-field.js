@@ -375,12 +375,10 @@ DominarField.prototype = {
 	 * @return {void}
 	 */
 	reset: function() {
-		var removeClasses = [];
+		var removeClasses = ['has-error', 'has-success'];
 
 		if (this.message) {
 			this.message.innerHTML = '';
-			removeClasses.push('has-error');
-			removeClasses.push('has-success');
 		}
 
 		if (this.feedback) {
