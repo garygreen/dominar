@@ -133,8 +133,14 @@ DominarField.prototype = {
 			data: data,
 			rules: rules,
 			customMessages: this.options.customMessages,
-			customAttributes: this.options.customAttributes
+			customAttributes: {}
 		};
+
+		if (typeof this.options.customAttributes === 'string') {
+			options.customAttributes[this.name] = this.options.customAttributes;
+		} else {
+			options.customAttributes = this.options.customAttributes;
+		}
 
 		if (this.options.validatorOptions)
 		{
