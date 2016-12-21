@@ -1523,7 +1523,7 @@ DominarField.prototype = {
 		if (validator.hasAsync) {
 			return validator.checkAsync(passesHandler, failsHandler);
 		}
-		
+
 		if (validator.passes()) {
 			passesHandler();
 		}
@@ -1531,7 +1531,7 @@ DominarField.prototype = {
 		{
 			failsHandler();
 		}
-		
+
 	},
 
 	/**
@@ -1599,8 +1599,14 @@ DominarField.prototype = {
 			data: data,
 			rules: rules,
 			customMessages: this.options.customMessages,
-			customAttributes: this.options.customAttributes
+			customAttributes: {}
 		};
+
+		if (typeof this.options.customAttributes === 'string') {
+			options.customAttributes[this.name] = this.options.customAttributes;
+		} else {
+			options.customAttributes = this.options.customAttributes;
+		}
 
 		if (this.options.validatorOptions)
 		{
@@ -1627,7 +1633,7 @@ DominarField.prototype = {
 		}
 
 		var sameRuleOptions = this._getRuleOptions('same');
-		
+
 		if (sameRuleOptions) {
 			includeValues.push(sameRuleOptions.options[0]);
 		}
@@ -1724,7 +1730,7 @@ DominarField.prototype = {
 	_getTrigger: function(event) {
 		var eventType = event.type;
 		var isKeyup = eventType == 'keyup';
-		
+
 		// Determine if validation can be triggered by this event (change, keyup etc)
 		var trigger = this.options.triggers.indexOf(eventType) > -1;
 
@@ -1841,15 +1847,18 @@ DominarField.prototype = {
 	 * @return {void}
 	 */
 	reset: function() {
-		Utils.element(this.container).removeClass('has-error has-success has-feedback');
-		
+		var removeClasses = ['has-error', 'has-success'];
+
 		if (this.message) {
 			this.message.innerHTML = '';
 		}
 
 		if (this.feedback) {
 			this.feedback.innerHTML = '';
+			removeClasses.push('has-feedback');
 		}
+
+		Utils.element(this.container).removeClass(removeClasses.join(' '));
 	}
 
 };
