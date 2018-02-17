@@ -65,6 +65,10 @@ module.exports = function(config) {
     browsers: ['PhantomJS', 'IE', 'IE10', 'IE9'],
 
     customLaunchers: {
+        IE11: {
+            base: 'IE',
+            'x-ua-compatible': 'IE=EmulateIE11'
+        },
         IE10: {
             base: 'IE',
             'x-ua-compatible': 'IE=EmulateIE10'
