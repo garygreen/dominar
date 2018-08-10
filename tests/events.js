@@ -14,6 +14,7 @@ describe('event tests', function() {
 		this.dominar.form.addEventListener('submit', this.submitHandler = function(event) {
 			event.preventDefault();
 		});
+		document.body.appendChild(this.dominar.form)
 	});
 
 	afterEach(function() {
