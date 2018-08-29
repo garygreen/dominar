@@ -68,6 +68,9 @@ Dominar.prototype = {
 		this.form.addEventListener('submit', this.eventHandlers.submit = function(event) {
 			dominar._fireSubmit.call(dominar, event);
 		});
+		this.form.addEventListener('invalid', (function(event) {
+			this.getField(event.target.name).showError(event.target.validationMessage);
+		}).bind(this), true);
 	},
 
 	/**

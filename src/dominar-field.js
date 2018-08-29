@@ -31,10 +31,20 @@ DominarField.prototype = {
 	 */
 	validate: function(passes, fails) {
 
-		var value = this.getValue();
-		var field = this;
 		passes = passes || Utils.noop;
 		fails = fails || Utils.noop;
+
+		this.fields[0].setCustomValidity('');
+
+		if (! this.fields[0].checkValidity()) {
+			var errorMessage = this.fields[0].validationMessage;
+			this.showError(errorMessage);
+			return fails(errorMessage);
+		}
+
+		var value = this.getValue();
+		var field = this;
+
 		if (this.validator)
 		{
 			delete this.validator;
@@ -50,8 +60,10 @@ DominarField.prototype = {
 		};
 
 		var failsHandler = function() {
-			field.showError(validator.errors.first(field.name));
-			fails(validator.errors.first(field.name));
+			var errorMessage = validator.errors.first(field.name)
+			field.fields[0].setCustomValidity(errorMessage);
+			field.fields[0].checkValidity();
+			fails(errorMessage);
 		};
 
 		if (validator.hasAsync) {
